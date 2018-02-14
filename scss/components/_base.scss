@@ -1,0 +1,37 @@
+/*===========================================
+
+	* css style for base Elements
+
+=============================================*/
+
+@import "variables";
+@import "placeholders";
+
+*,
+*:before,
+*:after {
+  @extend %boxSizingBorderBox;
+}
+
+*, *:focus {
+  outline: none;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+  font-size: 14px;
+
+  * {
+    @extend .fontFamilyLato;
+  }
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: " ";
+}
+.clearfix:after {
+  clear: both;
+}

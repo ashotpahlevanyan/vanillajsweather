@@ -1,0 +1,53 @@
+/*========Variables==================
+===================================*/
+
+$fontFamilyLato: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$fontBaseSize: 10px;
+$fontSize10: 10 * $fontBaseSize;
+$fontSize5: 5 * $fontBaseSize;
+$fontSize24: 2.4 * $fontBaseSize;
+$fontSize48: 4.8 * $fontBaseSize;
+
+
+
+$colorWhiteLight: rgba(255, 255, 255, 0.302);
+$colorWhiteDark: rgba(255, 255, 255, 0.149);
+$colorWhiteMiddle: rgba(255, 255, 255, 0.2);
+
+
+$colorMomondoLightBlue: rgba(0,202,254,.7);
+$colorMomondoIndigoDark: #140028;
+$colorMomondoIndigo: #1e063c;
+$colorMomondoError: #dc2635;
+$colorMomondoPink: #f0548d;
+$colorMomondoPinkLight: #ff73ab;
+
+//$navy: #37455a;
+//$blue: #abbdd3;
+//$cyan: #a3d9cb;
+//$peach: #ff9d7a;
+//
+//
+//$colors: (
+//  navy: $navy,
+//  blue: $blue,
+//  cyan: $cyan,
+//  peach: $peach
+//);
+//
+//@mixin gen-props($prefix, $property) {
+//  @each $color-name, $color in $colors {
+//    .#{$prefix}-#{$color-name} {
+//      #{$property}: $color
+//    }
+//  }
+//}
+//
+//@include gen-props('text', 'color');
+//@include gen-props('bg', 'background');
+
+
+$colorWhite: #fff;
+$colorLightBlue: #009ad8;
+$colorBlue: #323544;
+$colorDarkBlue: #1e202b;

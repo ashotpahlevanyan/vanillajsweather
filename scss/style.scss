@@ -1,0 +1,276 @@
+@import "components/reset";
+@import "components/mixins";
+@import "components/placeholders";
+@import "components/variables";
+@import "components/theme";
+//@import "scss/emmet";
+@import url("http://fonts.googleapis.com/css?family=Roboto:300,400,700");
+
+#app {
+  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #4d4d4d;
+  //min-width: 550px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+
+a.active, a:focus, a:active {
+  color: orange;
+}
+
+nav {
+  padding-top: 20px;
+}
+
+/*Dark theme of weather==========
+=================================*/
+
+$colorWhite: #fff;
+$colorLightBlue: #009ad8;
+$colorMainBg: #323544;
+$colorMainBgAlt: #414762;
+$colorDarkBg: #252733;
+$colorSuperDarkBlue: #1e202b;
+$colorHeader: #2c2f3d;
+$colorHover: #464c66;
+$colorWind: #96d800;
+$colorHumidity: #d85400;
+$ffRoboto: "Roboto", "Open Sans", sans-serif;
+$colorFontGrey: #bfc1c8;
+$fsBase: 14px;
+$fsSmall: 10px;
+$fsMiddle: 20px;
+$fsLarge: 30px;
+$fsHuge: 45px;
+$fsGiant: 60px;
+
+@media (max-width: 1200px) {
+
+}
+
+@media (max-width: 768px) {
+  .container, .container-fluid {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+}
+
+
+.darkWeatherHourly {
+  font-family: $ffRoboto;
+  color: $colorWhite;
+  font-size: $fsBase;
+  margin-bottom: 40px;
+  .result {
+    color: $colorDarkBg;
+  }
+  .header {
+    color: $colorBlue;
+  }
+  .form {
+    position: relative;
+    margin-bottom: 75px;
+    padding: 10px 15px;
+    .search {
+      @include border-radius(30px);
+      height: 60px;
+      line-height: 1.5;
+      font-size: $fsMiddle;
+      padding: 15px 120px 15px 30px;
+      background-color: $colorSuperDarkBlue;
+      width: 100%;
+      border: none;
+    }
+    .buttonPrimary {
+      position: absolute;
+      top: 28px;
+      right: 20px;
+      font-size: $fsMiddle;
+      line-height: 1.5;
+      background-color: $colorLightBlue;
+      color: $colorWhite;
+      border-radius: 26px;
+      border: none;
+      height: 50px;
+      padding: 10px 40px;
+    }
+  }
+  .weatherWrapper {
+    @include border-radius(10px);
+    background-color: $colorMainBg;
+    min-height: 300px;
+    color: $colorFontGrey;
+    //display: flex;
+    .current {
+      //min-width: 420px;
+      //width: 40%;
+      .currentHeader {
+        background-color: $colorHeader;
+        color: $colorFontGrey;
+        padding: 15px 10px;
+        @include border-radius-separate(10px, 10px, 0, 0);
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: $fsMiddle;
+      }
+      .day {
+        display: block;
+      }
+      .date {
+        display: block;
+      }
+      .content {
+        .location {
+          display: block;
+          font-size: $fsMiddle;
+          padding: 20px;
+        }
+        .weatherData {
+          font-size: $fsGiant;
+          text-align: center;
+        }
+        .temperature {
+          display: inline-block;
+          vertical-align: middle;
+          color: $colorWhite;
+          padding: 0 10px;
+        }
+        .sky {
+          display: inline-block;
+          vertical-align: middle;
+          color: $colorLightBlue;
+          margin-left: 20px;
+          padding: 0 10px;
+          font-size: $fsGiant;
+        }
+        .otherData {
+
+          display: flex;
+          margin: 0;
+          padding: 30px 0 10px;
+          font-size: 0;
+          li {
+            width: 33%;
+            padding: 5px 10px;
+            text-align: center;
+            font-size: $fsMiddle;
+            i {
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+    .tableWrapper {
+      margin-top: 15px;
+    }
+    .forecast {
+      @include border-radius-separate(0, 0, 10px, 10px);
+
+      thead {
+        font-size: $fsMiddle;
+        tr {
+          border: 1px solid #ddd;
+        }
+        .mainHeader th {
+          font-size: $fsLarge;
+          text-align: center;
+          border-top: 2px solid #ddd;
+        }
+      }
+      tbody {
+        tr {
+          &:last-child {
+            @include border-radius-separate(0, 0, 10px, 10px);
+            td {
+              &:first-child {
+                @include border-radius-separate(0, 0, 0, 10px);
+              }
+              &:last-child {
+                @include border-radius-separate(0, 0, 10px, 0);
+              }
+            }
+          }
+
+        }
+      }
+    }
+    tr {
+      &:nth-child(2n-1) {
+        background-color: $colorMainBg;
+      }
+      &:nth-last-child(2n) {
+        background-color: $colorMainBgAlt;
+        .currentHeader {
+          background-color: $colorDarkBg;
+        }
+      }
+      &:hover {
+        background-color: $colorHover;
+      }
+    }
+    td, th {
+      text-align: center;
+    }
+    td:first-child, th:first-child {
+      text-align: left;
+    }
+    .sky {
+      padding: 5px 0;
+      font-size: $fsLarge;
+      color: $colorLightBlue;
+      text-align: center;
+    }
+    .temperature {
+      color: $colorWhite;
+      line-height: 1.5;
+      text-align: center;
+      padding: 5px 0;
+
+      &.high {
+        font-size: $fsMiddle;
+        font-weight: bold;
+      }
+      &.low {
+        font-size: $fsBase;
+        padding-top: 0;
+      }
+    }
+    .dayOfWeek {
+      font-size: $fsMiddle;
+    }
+    .date {
+      font-size: $fsMiddle;
+    }
+    .wind, .humidity {
+      color: $colorWhite;
+      line-height: 1.5;
+      text-align: center;
+      padding: 3px 0;
+
+      i.wi {
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+    }
+    .wind {
+      i.wi {
+        color: $colorWind;
+        font-size: $fsLarge;
+      }
+
+    }
+    .humidity {
+      i.wi {
+        font-size: $fsMiddle;
+        color: $colorHumidity;
+      }
+    }
+  }
+}
+

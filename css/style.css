@@ -219,17 +219,19 @@ nav {
   font-size: 20px;
   padding: 15px 120px 15px 30px;
   background-color: #1e202b;
+  color: #fff;
   width: 100%;
   border: none;
 }
 .darkWeatherHourly .form .buttonPrimary {
   position: absolute;
-  top: 28px;
+  top: 15px;
   right: 20px;
   font-size: 20px;
   line-height: 1.5;
   background-color: #009ad8;
   color: #fff;
+  cursor: pointer;
   border-radius: 26px;
   border: none;
   height: 50px;
@@ -286,6 +288,12 @@ nav {
   vertical-align: middle;
   color: #fff;
   padding: 0 10px;
+}
+.darkWeatherHourly .weatherWrapper .current .content .temperature .unit {
+  font-size: 60px;
+}
+.darkWeatherHourly .weatherWrapper .current .content .temperature .unit sup {
+  font-size: 20px;
 }
 .darkWeatherHourly .weatherWrapper .current .content .sky {
   display: inline-block;
@@ -420,6 +428,7 @@ nav {
 }
 .darkWeatherHourly .weatherWrapper .dayOfWeek {
   font-size: 20px;
+  padding: 5px 0;
 }
 .darkWeatherHourly .weatherWrapper .date {
   font-size: 20px;
@@ -441,6 +450,14 @@ nav {
 .darkWeatherHourly .weatherWrapper .humidity i.wi {
   font-size: 20px;
   color: #d85400;
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.pull-right {
+  float: right !important;
 }
 
 /*# sourceMappingURL=style.css.map */

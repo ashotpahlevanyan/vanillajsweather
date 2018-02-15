@@ -4,319 +4,307 @@
 	<meta charset="utf-8">
 	<title>JS Weather App</title>
 	<link rel="stylesheet" href="vendor/css/bootstrap.min.css">
-  <link rel="stylesheet" href="vendor/weather-icons-master/css/weather-icons.min.css">
+	<link rel="stylesheet" href="vendor/weather-icons-master/css/weather-icons.min.css">
+	<link rel="stylesheet" href="vendor/weather-icons-master/css/weather-icons-wind.min.css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  
-	<div class="container-fluid">
-  	<div class="container darkWeatherHourly">
-  			 <form class="form" onSubmit="">
-          <div class="">
-            <label for="name">Search</label>
-            <div class="field">
-              <input
-                type="text"
-                name=""
-                class="form-control search"
-                placeholder="Search your City"
-                value=""
-                onChange="" />
-            </div>
-          </div>
-          <button type="submit" class="buttonPrimary">Find</button>
-        </form>
-        <div class="result">
-            
-        </div>
-  				<div class="weatherWrapper">
-  					<div class="current">
-  						<h4 class="currentHeader clearfix">
-  							<span class="day pull-left">Monday</span>
-  							<span class="date pull-right">6 Oct</span>
-  						</h4>
-  						<div class="content">
-  							<div class="location">New York</div>
-  							<div class="weatherData">
-  								<div class="temperature">23 <sup>o</sup>C</div>
-  								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  							</div>
-  							<ul class="otherData">
-  								<li><i class="wi wi-umbrella"></i>20%</li>
-  								<li><i class="wi wi-strong-wind"></i>18km/h</li>
-  								<li><i class="direction wi wi-wind-direction"></i>East</li>
-  							</ul>
-  						</div>
-  					</div>
-  					<div class="tableWrapper">
-  						<table class="table forecast">
-  							<thead>
-  								<tr class="mainHeader">
-  									<th colSpan="9">Forecast</th>
-  								</tr>
-  								<tr>
-  									<th>Date</th>
-  									<th>00:00</th>
-  									<th>03:00</th>
-  									<th>06:00</th>
-  									<th>09:00</th>
-  									<th>12:00</th>
-  									<th>15:00</th>
-  									<th>18:00</th>
-  									<th>21:00</th>
-  								</tr>
-  							</thead>
-  							<tbody>
-  								<tr class="day">
-  									<td>
-  										<h4 class="dayOfWeek">Tuesday</h4>
-  										<h4 class="date">Jan 11, 2017</h4>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sunny"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-fog"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  								</tr>
-  								<tr class="day">
-  									<td>
-  										<h4 class="dayOfWeek">Tuesday</h4>
-  										<h4 class="date">Jan 12, 2017</h4>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sunny"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-fog"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  								</tr>
-  								<tr class="day">
-  									<td>
-  										<h4 class="dayOfWeek">Tuesday</h4>
-  										<h4 class="date">Jan 13, 2017</h4>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sunny"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-fog"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  								</tr>
-  								<tr class="day">
-  									<td>
-  										<h4 class="dayOfWeek">Tuesday</h4>
-  										<h4 class="date">Jan 14, 2017</h4>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sunny"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  										<div class="humidity">
-  											<span><i class="wi wi-umbrella"></i>20 %</span>
-  										</div>
-  										<div class="wind">
-  											<i class="wi wi-wind towards-23-deg"></i>18 m/s
-  										</div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-fog"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  								</tr>
-  								<tr class="day">
-  									<td>
-  										<h4 class="dayOfWeek">Tuesday</h4>
-  										<h4 class="date">Jan 15, 2017</h4>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sunny"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-fog"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  									<td>
-  										<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
-  										<div class="temperature high">23<sup>o</sup>C</div>
-  										<div class="temperature low">18<sup>o</sup></div>
-  									</td>
-  								</tr>
-  							</tbody>
-  						</table>
-  					</div>
-  				</div>
-  			</div>
-  	</div>
-
-	
+	<div class="container darkWeatherHourly">
+			<form class="form" onSubmit="">
+				<div class="field">
+					<input type="text" name="" class="form-control search" placeholder="Search your City" value="" onChange="" />
+				</div>
+				<button type="submit" class="buttonPrimary">Find</button>
+		</form>
+		<div class="result">
+				<!-- Will be deleted soon, just for raw data display -->
+		</div>
+		<div class="weatherWrapper">
+			<div class="current">
+				<h4 class="currentHeader clearfix">
+					<span class="day pull-left">Monday</span>
+					<span class="date pull-right">6 Oct</span>
+				</h4>
+				<div class="content">
+					<div class="location">New York</div>
+					<div class="weatherData">
+						<div class="temperature"><span class="value">23</span><span class="unit"><sup>o</sup>C</span></div>
+						<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+					</div>
+					<ul class="otherData">
+						<li><i class="wi wi-umbrella"></i>20%</li>
+						<li><i class="wi wi-strong-wind"></i>18km/h</li>
+						<li><i class="direction wi wi-wind-direction"></i>East</li>
+					</ul>
+				</div>
+			</div>
+			<!-- <div class="tableWrapper">
+				<table class="table forecast">
+					<thead>
+						<tr class="mainHeader">
+							<th colSpan="9">Forecast</th>
+						</tr>
+						<tr>
+							<th>Date</th>
+							<th>00:00</th>
+							<th>03:00</th>
+							<th>06:00</th>
+							<th>09:00</th>
+							<th>12:00</th>
+							<th>15:00</th>
+							<th>18:00</th>
+							<th>21:00</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="day">
+							<td>
+								<h4 class="dayOfWeek">Tuesday</h4>
+								<h4 class="date">Jan 11, 2017</h4>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sunny"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-fog"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+						</tr>
+						<tr class="day">
+							<td>
+								<h4 class="dayOfWeek">Tuesday</h4>
+								<h4 class="date">Jan 12, 2017</h4>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sunny"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-fog"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+						</tr>
+						<tr class="day">
+							<td>
+								<h4 class="dayOfWeek">Tuesday</h4>
+								<h4 class="date">Jan 13, 2017</h4>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sunny"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-fog"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+						</tr>
+						<tr class="day">
+							<td>
+								<h4 class="dayOfWeek">Tuesday</h4>
+								<h4 class="date">Jan 14, 2017</h4>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sunny"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+								<div class="humidity">
+									<span><i class="wi wi-umbrella"></i>20 %</span>
+								</div>
+								<div class="wind">
+									<i class="wi wi-wind towards-23-deg"></i>18 m/s
+								</div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-fog"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+						</tr>
+						<tr class="day">
+							<td>
+								<h4 class="dayOfWeek">Tuesday</h4>
+								<h4 class="date">Jan 15, 2017</h4>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sunny"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-fog"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-rain-wind"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-day-sleet-storm"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+							<td>
+								<div class="sky"><i class="wi wi-solar-eclipse"></i></div>
+								<div class="temperature high">23<sup>o</sup>C</div>
+								<div class="temperature low">18<sup>o</sup></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div> -->
+		</div>
+	</div>
 
 			<!-- Scripts go here -->
 
-			<script src="vendor/js/jquery-3.2.1.slim.min.js"></script>
-			<script src="vendor/js/popper.min.js"></script>
-      <script src="vendor/js/bootstrap.min.js"></script>
-			<script src="js/index.js"></script>
+	<script src="vendor/js/jquery-3.2.1.slim.min.js"></script>
+	<script src="vendor/js/popper.min.js"></script>
+	<script src="vendor/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyBWExvyFo3mj4lXIzYx7DXwfAj_ACvHfmM"></script>
+	<script src="js/index.js"></script>
 </body>
 </html>

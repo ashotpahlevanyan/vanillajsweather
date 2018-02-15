@@ -14,7 +14,6 @@
 	margin: 0 auto;
 }
 
-
 a.active, a:focus, a:active {
 	color: orange;
 }
@@ -68,6 +67,11 @@ $fsGiant: 60px;
 	margin-bottom: 40px;
 	.result {
 		color: $colorDarkBg;
+		background-color: orange;
+		border: 2px solid $colorLightBlue;
+		padding: 15px;
+		@include border-radius(10px);
+		margin-bottom: 15px;
 	}
 	.header {
 		color: $colorBlue;
@@ -126,43 +130,53 @@ $fsGiant: 60px;
 			.date {
 				display: block;
 			}
-			.content {
-				.location {
-					display: block;
-					font-size: $fsMiddle;
-					padding: 20px;
-				}
-				.weatherData {
-					font-size: $fsGiant;
+			
+		}
+		.content {
+			.location {
+				display: block;
+				font-size: $fsGiant;
+				padding: 20px;
+			}
+			.weatherData {
+				font-size: $fsGiant;
+				text-align: center;
+			}
+			.temperature {
+				display: inline-block;
+				vertical-align: middle;
+				color: $colorWhite;
+				padding: 0 10px;
+			}
+			.sky {
+				display: inline-block;
+				vertical-align: middle;
+				color: $colorLightBlue;
+				margin-left: 20px;
+				padding: 0 10px;
+				font-size: $fsGiant;
+			}
+			.otherData {
+				display: flex;
+				margin: 0;
+				padding: 30px 0 10px;
+				font-size: 0;
+				li {
+					width: 33%;
+					padding: 5px 10px;
 					text-align: center;
-				}
-				.temperature {
-					display: inline-block;
-					vertical-align: middle;
-					color: $colorWhite;
-					padding: 0 10px;
-				}
-				.sky {
-					display: inline-block;
-					vertical-align: middle;
-					color: $colorLightBlue;
-					margin-left: 20px;
-					padding: 0 10px;
-					font-size: $fsGiant;
-				}
-				.otherData {
-
-					display: flex;
-					margin: 0;
-					padding: 30px 0 10px;
-					font-size: 0;
-					li {
-						width: 33%;
-						padding: 5px 10px;
-						text-align: center;
-						font-size: $fsMiddle;
-						i {
-							margin-right: 10px;
+					font-size: $fsLarge;
+					i {
+						display: inline-block;
+						vertical-align: middle;
+						margin-right: 10px;
+						font-size: $fsGiant;
+						color: orange;
+						&.wi-umbrella {
+							color: green;
+						}
+						&.direction {
+							color: purple;
 						}
 					}
 				}
@@ -275,12 +289,5 @@ $fsGiant: 60px;
 			}
 		}
 	}
-}
-
-.pull-left {
-	float: left !important;
-}
-.pull-right {
-	float: right !important;
 }
 

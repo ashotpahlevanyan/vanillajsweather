@@ -198,6 +198,16 @@ nav {
 }
 .darkWeatherHourly .result {
   color: #252733;
+  background-color: orange;
+  border: 2px solid #009ad8;
+  padding: 15px;
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
 }
 .darkWeatherHourly .header {
   color: #323544;
@@ -274,22 +284,22 @@ nav {
 .darkWeatherHourly .weatherWrapper .current .date {
   display: block;
 }
-.darkWeatherHourly .weatherWrapper .current .content .location {
+.darkWeatherHourly .weatherWrapper .content .location {
   display: block;
-  font-size: 20px;
+  font-size: 60px;
   padding: 20px;
 }
-.darkWeatherHourly .weatherWrapper .current .content .weatherData {
+.darkWeatherHourly .weatherWrapper .content .weatherData {
   font-size: 60px;
   text-align: center;
 }
-.darkWeatherHourly .weatherWrapper .current .content .temperature {
+.darkWeatherHourly .weatherWrapper .content .temperature {
   display: inline-block;
   vertical-align: middle;
   color: #fff;
   padding: 0 10px;
 }
-.darkWeatherHourly .weatherWrapper .current .content .sky {
+.darkWeatherHourly .weatherWrapper .content .sky {
   display: inline-block;
   vertical-align: middle;
   color: #009ad8;
@@ -297,20 +307,30 @@ nav {
   padding: 0 10px;
   font-size: 60px;
 }
-.darkWeatherHourly .weatherWrapper .current .content .otherData {
+.darkWeatherHourly .weatherWrapper .content .otherData {
   display: flex;
   margin: 0;
   padding: 30px 0 10px;
   font-size: 0;
 }
-.darkWeatherHourly .weatherWrapper .current .content .otherData li {
+.darkWeatherHourly .weatherWrapper .content .otherData li {
   width: 33%;
   padding: 5px 10px;
   text-align: center;
-  font-size: 20px;
+  font-size: 30px;
 }
-.darkWeatherHourly .weatherWrapper .current .content .otherData li i {
+.darkWeatherHourly .weatherWrapper .content .otherData li i {
+  display: inline-block;
+  vertical-align: middle;
   margin-right: 10px;
+  font-size: 60px;
+  color: orange;
+}
+.darkWeatherHourly .weatherWrapper .content .otherData li i.wi-umbrella {
+  color: green;
+}
+.darkWeatherHourly .weatherWrapper .content .otherData li i.direction {
+  color: purple;
 }
 .darkWeatherHourly .weatherWrapper .tableWrapper {
   margin-top: 15px;
@@ -444,14 +464,6 @@ nav {
 .darkWeatherHourly .weatherWrapper .humidity i.wi {
   font-size: 20px;
   color: #d85400;
-}
-
-.pull-left {
-  float: left !important;
-}
-
-.pull-right {
-  float: right !important;
 }
 
 /*# sourceMappingURL=style.css.map */

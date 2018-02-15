@@ -14,7 +14,8 @@ let currentWeather;
 let forecastWeather;
 
 // DOM elements
-let weatherWrapper = document.querySelector('.weatherWrapper');
+let darkWeatherHourly = document.querySelector('.darkWeatherHourly');
+let weatherWrapper;
 let buttonPrimary = document.querySelector('.buttonPrimary');
 let searchForm = document.querySelector('.form');
 let searchInput = document.querySelector('input.search');
@@ -24,8 +25,6 @@ let result = document.querySelector('.result');
 
 searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
-	console.log('form submitted with value ' + searchInput.value.trim());
-
 	let request = new XMLHttpRequest();
 	request.open('GET', url);
 	request.responseType = 'json';
@@ -33,6 +32,7 @@ searchForm.addEventListener('submit', function(e) {
 		forecastWeather = request.response;
 		console.log(forecastWeather);
 		updateDisplay();
+		result.textContent = JSON.stringify(forecastWeather);
 	};
 	request.send();
 });
@@ -40,10 +40,6 @@ searchForm.addEventListener('submit', function(e) {
 searchInput.addEventListener('input', function(e) {
 	cityId = e.target.value.trim();
 	url = apiUrl + '/forecast?q=' + cityId + '&units=metric&APPID=' + API_KEY;
-});
-
-buttonPrimary.addEventListener('click', function(){
-	console.log('button clicked');
 });
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -61,19 +57,30 @@ document.addEventListener('DOMContentLoaded', function(){
 		request.onload = function() {
 			currentWeather = request.response;
 			console.log(currentWeather);
+			//initialize();
+			weatherWrapper = document.createElement('div');
+			weatherWrapper.className = 'weatherWrapper';
+			darkWeatherHourly.appendChild(weatherWrapper);
 			updateCurrent(currentWeather);
 		};
 		request.send();
 	});
 });
 
-function initialize() {
-	var weatherWrapper = document.createElement('div');
-	weatherWrapper.className = 'weatherWrapper';
-}
-
 function updateDisplay() {
-	updateCurrent(currentWeather);
+	if(weatherWrapper !== undefined) {
+		while(weatherWrapper.firstChild) {
+			weatherWrapper.removeChild(weatherWrapper.firstChild);
+		}
+	} else {
+		if(weatherWrapper !== undefined) {
+			weatherWrapper = document.createElement('div');
+			weatherWrapper.className = 'weatherWrapper';
+			darkWeatherHourly.appendChild(weatherWrapper);
+		}
+	}
+	
+	//updateCurrent(currentWeather);
 	updateForecast(forecastWeather);
 }
 
@@ -85,10 +92,10 @@ function updateCurrent(currentWeather){
 	currentHeader.classList = ['currentHeader', 'clearfix'].join(' ');
 	var	currentDate = new Date();
 	var day = document.createElement('span');
-	day.classList = ['day', 'pull-left'].join(' ');
+	day.classList = ['day', 'float-left'].join(' ');
 	day.textContent = dateNameByValue('day', currentDate.getDay());
 	var date = document.createElement('span');
-	date.classList = ['day', 'pull-right'].join(' ');
+	date.classList = ['day', 'float-right'].join(' ');
 	date.textContent = currentDate.getDate() + ' ' + dateNameByValue('month', currentDate.getMonth());
 	current.appendChild(currentHeader);
 	currentHeader.appendChild(day);

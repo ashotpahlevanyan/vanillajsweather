@@ -89,6 +89,10 @@ function updateDisplay() {
 }
 
 function updateCurrent(currentWeather){
+	var old = document.querySelector('.current');
+	if(old) {
+		old.parentNode.removeChild(old);
+	}
 	var weather = currentWeather;
 	var current = document.createElement('div');
 	current.className = 'current';

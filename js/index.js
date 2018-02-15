@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 window.onresize = function(event) {
-	updateDisplay();
+	updateCurrent(currentWeather);
 }
 
 function updateDisplay() {
@@ -167,6 +167,7 @@ function updateCurrent(currentWeather){
 
 	content.appendChild(otherData);
 	current.appendChild(content);
+	content.style.backgroundImage = "url('" + calculateImageUrl(weather.weather[0].icon) + "')";
 
 	weatherWrapper.appendChild(current);
 }
@@ -350,6 +351,65 @@ function calculateSkyClass(icon) {
 			calculatedClass += "wi-day-sunny";
 	}
 	return calculatedClass;
+}
+
+function calculateImageUrl(icon) {
+	let calculatedImageUrl = "./images/";
+	switch(icon) {
+		case '01d':
+			calculatedImageUrl += "day-sunny.jpg";
+			break;
+		case '01n':
+			calculatedImageUrl += "night-stars.jpg";
+			break;
+		case '02d':
+			calculatedImageUrl += "day-cloudy.jpg";
+			break;
+		case '02n':
+			calculatedImageUrl += "night-cloudy.jpg";
+			break;
+		case '03d':
+		case '03n':
+			calculatedImageUrl += "day-night-cloudy.jpg";
+			break;
+		case '04d':
+		case '04n':
+			calculatedImageUrl += "day-night-cloudy.jpg";
+			break;
+		case '09d':
+			calculatedImageUrl += "day-showers.jpg";
+			break;
+		case '09n':
+			calculatedImageUrl += "night-showers.jpg";
+			break;
+		case '10d':
+			calculatedImageUrl += "day-rainy.jpg";
+			break;
+		case '10n':
+			calculatedImageUrl += "night-rainy.jpg";
+			break;
+		case '11d':
+			calculatedImageUrl += "day-thunderstorm.jpg";
+			break;
+		case '11n':
+			calculatedImageUrl += "night-thunderstorm.jpg";
+			break;
+		case '13d':
+			calculatedImageUrl += "day-snowy.jpg";
+			break;
+		case '13n':
+			calculatedImageUrl += "night-snowy.jpg";
+			break;
+		case '50d':
+			calculatedImageUrl += "day-foggy.jpg";
+			break;
+		case '50n':
+			calculatedImageUrl += "night-foggy.jpg";
+			break;
+		default:
+			calculatedImageUrl += "day-sunny.jpg";
+	}
+	return calculatedImageUrl;
 }
 
 

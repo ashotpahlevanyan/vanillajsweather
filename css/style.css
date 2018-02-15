@@ -276,7 +276,6 @@ nav {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   margin-top: 0;
-  margin-bottom: 20px;
   font-size: 20px;
 }
 .darkWeatherHourly .weatherWrapper .current .day {
@@ -285,12 +284,19 @@ nav {
 .darkWeatherHourly .weatherWrapper .current .date {
   display: block;
 }
+.darkWeatherHourly .weatherWrapper .content {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  padding-top: 10px;
+}
 .darkWeatherHourly .weatherWrapper .content .location {
   display: block;
   font-size: 60px;
   padding: 20px;
 }
 .darkWeatherHourly .weatherWrapper .content .weatherData {
+  padding: 15px 0;
   font-size: 60px;
   text-align: center;
 }
@@ -309,9 +315,10 @@ nav {
   font-size: 60px;
 }
 .darkWeatherHourly .weatherWrapper .content .otherData {
+  background: rgba(255, 255, 255, 0.1);
   display: flex;
   margin: 0;
-  padding: 30px 0 10px;
+  padding: 15px 0 15px;
   font-size: 0;
 }
 .darkWeatherHourly .weatherWrapper .content .otherData li {

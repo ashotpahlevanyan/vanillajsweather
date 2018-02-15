@@ -289,12 +289,6 @@ nav {
   color: #fff;
   padding: 0 10px;
 }
-.darkWeatherHourly .weatherWrapper .current .content .temperature .unit {
-  font-size: 60px;
-}
-.darkWeatherHourly .weatherWrapper .current .content .temperature .unit sup {
-  font-size: 20px;
-}
 .darkWeatherHourly .weatherWrapper .current .content .sky {
   display: inline-block;
   vertical-align: middle;

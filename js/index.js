@@ -32,7 +32,6 @@ searchForm.addEventListener('submit', function(e) {
 	request.onload = function() {
 		forecastWeather = request.response;
 		console.log(forecastWeather);
-		currentWeather = forecastWeather.list[0];
 		updateDisplay();
 	};
 	request.send();
@@ -124,7 +123,7 @@ function updateCurrent(currentWeather){
 	var sky = document.createElement('div');
 	sky.className = 'sky';
 	var skyIcon = document.createElement('i');
-	skyIcon.classList = wiIconClass('sky', 5).join(' ');
+	skyIcon.classList = calculateSkyClass(weather.weather[0].icon);
 	sky.appendChild(skyIcon);
 	weatherData.appendChild(temperature);
 	weatherData.appendChild(sky);
@@ -280,6 +279,65 @@ function calculateDirectionText(angle) {
 function calculateDirectionClass(angle) {
 	let calculatedClass = "wi wi-wind ";
 	calculatedClass += "from-" + Math.round(angle) + "-deg";
+	return calculatedClass;
+}
+
+function calculateSkyClass(icon) {
+	let calculatedClass = "wi ";
+	switch(icon) {
+		case '01d':
+			calculatedClass += "wi-day-sunny";
+			break;
+		case '01n':
+			calculatedClass += "wi-night-clear";
+			break;
+		case '02d':
+			calculatedClass += "wi-day-cloudy";
+			break;
+		case '02n':
+			calculatedClass += "wi-night-cloudy";
+			break;
+		case '03d':
+		case '03n':
+			calculatedClass += "wi-cloud";
+			break;
+		case '04d':
+		case '04n':
+			calculatedClass += "wi-cloudy";
+			break;
+		case '09d':
+			calculatedClass += "wi-day-showers";
+			break;
+		case '09n':
+			calculatedClass += "wi-night-showers";
+			break;
+		case '10d':
+			calculatedClass += "wi-day-rain";
+			break;
+		case '10n':
+			calculatedClass += "wi-night-rain";
+			break;
+		case '11d':
+			calculatedClass += "wi-day-thunderstorm";
+			break;
+		case '11n':
+			calculatedClass += "wi-night-thunderstorm";
+			break;
+		case '13d':
+			calculatedClass += "wi-day-snow";
+			break;
+		case '13n':
+			calculatedClass += "wi-night-snow";
+			break;
+		case '50d':
+			calculatedClass += "wi-day-fog";
+			break;
+		case '50n':
+			calculatedClass += "wi-night-fog";
+			break;
+		default:
+			calculatedClass += "wi-day-sunny";
+	}
 	return calculatedClass;
 }
 

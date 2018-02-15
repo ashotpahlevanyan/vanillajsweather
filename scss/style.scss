@@ -78,8 +78,9 @@ $fsGiant: 60px;
 	}
 	.form {
 		position: relative;
-		margin-bottom: 75px;
-		padding: 10px 15px;
+		margin-top: 30px;
+		margin-bottom: 30px;
+		padding: 10px 0;
 		.search {
 			@include border-radius(30px);
 			height: 60px;
@@ -94,7 +95,7 @@ $fsGiant: 60px;
 		.buttonPrimary {
 			position: absolute;
 			top: 15px;
-			right: 20px;
+			right: 5px;
 			font-size: $fsMiddle;
 			line-height: 1.5;
 			background-color: $colorLightBlue;

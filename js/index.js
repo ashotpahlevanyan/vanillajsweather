@@ -67,6 +67,10 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 });
 
+window.onresize = function(event) {
+	updateDisplay();
+}
+
 function updateDisplay() {
 	if(weatherWrapper !== undefined) {
 		while(weatherWrapper.firstChild) {

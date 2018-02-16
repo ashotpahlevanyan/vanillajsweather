@@ -2,11 +2,9 @@
 
 let API_KEY = "468f937be26c4d91fe63cc0f4b7c0c12";
 let apiUrl = "http://api.openweathermap.org/data/2.5/";
-let cityId = 'Washington';
-//let url = apiUrl + '/forecast?id=' + cityId + '&units=metric&APPID=' + API_KEY;
-//let locationUrl = apiUrl + 'weather?lat=' + position.coords.latitude + '&lon='+ position.coords.longitude + '&units=metric&APPID=' + API_KEY;
 let units = 'metric'; //imperial, standard
-let url = apiUrl + '/forecast?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
+// let furl = apiUrl + '/forecast?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
+// let curl = apiUrl + '/weather?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
 
 // Storage variables
 
@@ -23,52 +21,67 @@ let result = document.querySelector('.result');
 
 // DOM Element Event handlers
 
-searchForm.addEventListener('submit', function(e) {
-	e.preventDefault();
+document.addEventListener('DOMContentLoaded', domContentLoaded);
+
+function domContentLoaded() {
+	navigator.geolocation.getCurrentPosition(weatherByPosition);
+}
+
+function weatherByPosition(position){
+	let url = apiUrl + 'weather?lat=' + 
+		position.coords.latitude + 
+		'&lon='+ position.coords.longitude + 
+		'&units=' + units + '&APPID=' + API_KEY;
+	XHRCall(url, 'json', displayCurrent);
+}
+
+function weatherByCityId(cityId){
+	let url = apiUrl + '/weather?q=' + 
+			cityId + '&units=' + units + 
+			'&APPID=' + API_KEY;
+	XHRCall(url, 'json', displayCurrent);
+}
+
+function forecastByCityId(cityId) {
+	let url = apiUrl + '/forecast?q=' + 
+				cityId + '&units=' + units + 
+				'&APPID=' + API_KEY;
+	XHRCall(url, 'json', displayForecast);
+}
+
+function XHRCall(url, type, cb) {
 	let request = new XMLHttpRequest();
 	request.open('GET', url);
-	request.responseType = 'json';
+	request.responseType = type;
 	request.onload = function() {
-		forecastWeather = request.response;
-		console.log(forecastWeather);
-		updateDisplay();
-		result.textContent = JSON.stringify(forecastWeather);
+		cb(request.response);
 	};
 	request.send();
+}
+
+function displayCurrent(weather) {
+	console.log(weather);
+	weatherWrapper = document.createElement('div');
+	weatherWrapper.className = 'weatherWrapper';
+	darkWeatherHourly.appendChild(weatherWrapper);
+	updateCurrent(weather);
+}
+
+function displayForecast(weather) {
+	console.log(weather);
+	result.textContent = JSON.stringify(weather);
+}
+
+searchForm.addEventListener('submit', function(e) {
+	e.preventDefault();
+	let searchInput = e.target.elements['search'];
+	forecastByCityId(searchInput.value.trim());
 });
 
-searchInput.addEventListener('input', function(e) {
-	cityId = e.target.value.trim();
-	url = apiUrl + '/forecast?q=' + cityId + '&units=metric&APPID=' + API_KEY;
-});
 
-document.addEventListener('DOMContentLoaded', function(){
-	navigator.geolocation.getCurrentPosition(function(position){
-		console.log(position);
-
-		let locationUrl = apiUrl + 'weather?lat=' + 
-			position.coords.latitude + 
-			'&lon='+ position.coords.longitude + 
-			'&units=' + units + '&APPID=' + API_KEY;
-
-		let request = new XMLHttpRequest();
-		request.open('GET', locationUrl);
-		request.responseType = 'json';
-		request.onload = function() {
-			currentWeather = request.response;
-			console.log(currentWeather);
-			//initialize();
-			weatherWrapper = document.createElement('div');
-			weatherWrapper.className = 'weatherWrapper';
-			darkWeatherHourly.appendChild(weatherWrapper);
-			updateCurrent(currentWeather);
-		};
-		request.send();
-	});
-});
-
+//till here cleaned
 window.onresize = function(event) {
-	updateCurrent(currentWeather);
+	//updateCurrent(currentWeather);
 }
 
 function updateDisplay() {
@@ -77,11 +90,9 @@ function updateDisplay() {
 			weatherWrapper.removeChild(weatherWrapper.firstChild);
 		}
 	} else {
-		if(weatherWrapper !== undefined) {
-			weatherWrapper = document.createElement('div');
-			weatherWrapper.className = 'weatherWrapper';
-			darkWeatherHourly.appendChild(weatherWrapper);
-		}
+		weatherWrapper = document.createElement('div');
+		weatherWrapper.className = 'weatherWrapper';
+		darkWeatherHourly.appendChild(weatherWrapper);
 	}
 	
 	//updateCurrent(currentWeather);
@@ -263,7 +274,7 @@ function dateNameByValue(type, value) {
 }
 
 function calculateDirectionText(angle) {
-	let calculatedText = "";
+	let calculatedText = "Spread";
 	if((angle >= 337.5 && angle < 360 ) || ( angle >= 0 && angle < 22.5 )) {
 		calculatedText = "East";
 	}
@@ -294,7 +305,9 @@ function calculateDirectionText(angle) {
 
 function calculateDirectionClass(angle) {
 	let calculatedClass = "wi wi-wind ";
-	calculatedClass += "from-" + Math.round(angle) + "-deg";
+	if(angle !== undefined) {
+		calculatedClass += "from-" + Math.round(angle) + "-deg";
+	}
 	return calculatedClass;
 }
 

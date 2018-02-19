@@ -12,16 +12,15 @@ let currentWeather;
 let forecastWeather;
 
 // DOM elements
-let darkWeatherHourly = document.querySelector('.darkWeatherHourly');
-let weatherWrapper;
-let buttonPrimary = document.querySelector('.buttonPrimary');
+let weatherWrapper = document.querySelector('.weatherWrapper');
 let searchForm = document.querySelector('.form');
-let searchInput = document.querySelector('input.search');
 let result = document.querySelector('.result');
 
 // DOM Element Event handlers
 
 document.addEventListener('DOMContentLoaded', domContentLoaded);
+
+document.addEventListener('DOMContentLoaded', showHideWrapper);
 
 function domContentLoaded() {
 	navigator.geolocation.getCurrentPosition(weatherByPosition);
@@ -61,43 +60,77 @@ function XHRCall(url, type, cb) {
 
 function displayCurrent(weather) {
 	console.log(weather);
-	weatherWrapper = document.createElement('div');
-	weatherWrapper.className = 'weatherWrapper';
-	darkWeatherHourly.appendChild(weatherWrapper);
 	updateCurrent(weather);
 }
 
 function displayForecast(weather) {
 	console.log(weather);
-	result.textContent = JSON.stringify(weather);
+	//result.textContent = JSON.stringify(weather);
+	enhanceWeather(weather);
+	updateForecast(weather, window.innerWidth || document.documentElement.clientWidth 
+				|| document.body.clientWidth);
 }
 
 searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
 	let searchInput = e.target.elements['search'];
 	forecastByCityId(searchInput.value.trim());
+	weatherByCityId(searchInput.value.trim());
 });
 
-
-//till here cleaned
-window.onresize = function(event) {
-	//updateCurrent(currentWeather);
-}
-
-function updateDisplay() {
-	if(weatherWrapper !== undefined) {
-		while(weatherWrapper.firstChild) {
-			weatherWrapper.removeChild(weatherWrapper.firstChild);
-		}
+function showHideWrapper() {
+	var current = document.querySelector('.current');
+	var tableWrapper = document.querySelector('.tableWrapper');
+	if(current.firstChild || tableWrapper.firstChild) {
+		weatherWrapper.style.display = 'block';
+		console.log('block');
 	} else {
-		weatherWrapper = document.createElement('div');
-		weatherWrapper.className = 'weatherWrapper';
-		darkWeatherHourly.appendChild(weatherWrapper);
+		weatherWrapper.style.display = 'none';
+		console.log('none');
 	}
-	
-	//updateCurrent(currentWeather);
-	updateForecast(forecastWeather);
 }
+
+window.onresize = function(event) {
+	var w = window.innerWidth 
+				|| document.documentElement.clientWidth 
+				|| document.body.clientWidth;
+	if(forecastWeather) {
+		updateForecast(forecastWeather, w);
+	}
+}
+
+function enhanceWeather(weather) {
+	let dateSet = new Set();
+	let map = new Map();
+	for(var i = 0; i < weather.list.length; i++) {
+		let res = getDateTime(weather.list[i].dt_txt);
+		weather.list[i].date = res.date;
+		weather.list[i].time = res.time;
+		dateSet.add(res.date);
+		map.set(res.date, []);
+	}
+	weather.dateSet = dateSet;
+	for(const [key, value] of map.entries()) {
+		for(var i = 0; i < weather.list.length; i++) {
+			if(weather.list[i].date == key) {
+				value.push(weather.list[i]);
+			}
+		}
+	}
+	weather.map = map;
+	
+	console.log(weather);
+}
+
+
+function getDateTime(dateString) {
+  let dateArr = dateString.split(' ');
+  return {
+    date: dateArr[0],
+    time: dateArr[1].substr(0,5)
+  };
+}
+
 
 function updateCurrent(currentWeather){
 	var old = document.querySelector('.current');
@@ -160,7 +193,7 @@ function updateCurrent(currentWeather){
 	var umbrella = document.createElement('i')
 	umbrella.classList = ['wi', 'wi-umbrella'].join(' ');
 	humidity.appendChild(umbrella);
-	humidity.appendChild(document.createTextNode(currentWeather.main.humidity));
+	humidity.appendChild(document.createTextNode(weather.main.humidity));
 	humidity.appendChild(document.createTextNode('%'));
 
 	var wind = document.createElement('li');
@@ -185,14 +218,141 @@ function updateCurrent(currentWeather){
 	content.style.backgroundImage = "url('" + calculateImageUrl(weather.weather[0].icon) + "')";
 
 	weatherWrapper.appendChild(current);
+
+	showHideWrapper();
 }
 
-function updateForecast(forecastWeather){
-	
+function updateForecast(forecastWeather, size){
+	forecastTable = document.querySelector('.forecast');
+	if(forecastTable) {
+		forecastTable.parentNode.removeChild(forecastTable);
+	}
+	if(size > 768) {
+		var forecastTable = document.createElement('table');
+		forecastTable.classList = 'table forecast';
+		var thead = document.createElement('thead');
+		var tbody = document.createElement('tbody');
+
+		forecastTable.appendChild(thead);
+		forecastTable.appendChild(tbody);
+
+		var thr1 = document.createElement('tr');
+		thr1.className = 'mainHeader';
+		var tr1 = document.createElement('tr');
+		tr1.setAttribute('colSpan', 9);
+		tr1.textContent = 'Forecast';
+
+		var thr2 = document.createElement('tr');
+		var values = ['Date', '00:00', '03:00', '06:00', '09:00',
+							'12:00', '15:00', '18:00', '21:00'];
+		for(let i = 0; i < values.length; i++) {
+			let elem = document.createElement('th');
+			elem.textContent = values[i];
+			thr2.appendChild(elem);
+		}
+
+		thead.appendChild(thr1);
+		thead.appendChild(thr2);
+		let index = 0;
+		for(const [key, value] of forecastWeather.map.entries()) {
+			let tbr = document.createElement('tr');
+			tbr.className = 'day';
+			let td1 = document.createElement('td');
+			let heading1 = document.createElement('h4');
+			heading1.className = 'dayOfWeek';
+			let dateKey = new Date(key);
+			heading1.textContent = dateNameByValue('day', dateKey.getDay());
+			let heading2 = document.createElement('h4');
+			heading2.className = 'date';
+			heading2.textContent = dateKey.getDate() + ' ' + dateNameByValue('month', dateKey.getMonth());
+			td1.appendChild(heading1);
+			td1.appendChild(heading2);
+			tbr.appendChild(td1);
+			index ++;
+			for(let j = 0; j < value.length; j++) {
+				if(value.length === 8) {
+					tbr.appendChild(createCell(value[j]));
+				} else {
+					if(j == 0 && index == 1) {
+						let td = document.createElement('td');
+						td.textContent = '';
+						td.colSpan = 8 - value.length;
+						tbr.appendChild(td);
+					}
+					tbr.appendChild(createCell(value[j]));
+				}
+			}
+			if(index === 6){
+				let td = document.createElement('td');
+				td.textContent = '';
+				td.colSpan = 8 - value.length;
+				tbr.appendChild(td);
+			}
+			tbody.appendChild(tbr);
+		}
+		
+		weatherWrapper.appendChild(forecastTable);
+	} else {
+		console.log('Yalla');
+	}
+
+	showHideWrapper();
 }
 
-function wiIconClass(type, value) {
-	return ['wi', 'wi-day-sleet-storm'];
+function createCell(item) {
+	let td = document.createElement('td');
+	let sky = document.createElement('div');
+	sky.className = 'sky';
+	let weatherIcon = document.createElement('i');
+	weatherIcon.classList = calculateSkyClass(item.weather[0].icon);
+	sky.appendChild(weatherIcon);
+	td.appendChild(sky);
+
+	(function (){
+		var temperature = document.createElement('div');
+		temperature.classList = 'temperature high';
+		var tempValue = document.createElement('span');
+		tempValue.className = 'value';
+		tempValue.textContent = item.main.temp_max;
+		temperature.appendChild(tempValue);
+		var unit = document.createElement('span');
+		unit.className = 'unit';
+		if(units == 'metric') {
+			unit.textContent = 'C';
+			var celcius = document.createElement('sup');
+			celcius.textContent = 'o';
+			unit.insertBefore(celcius, unit.firstChild);
+		} else {
+			unit.textContent = 'F';
+		}
+		temperature.appendChild(unit);
+		td.appendChild(temperature);
+	})();
+
+	(function (){
+		var temperature = document.createElement('div');
+		temperature.classList = 'temperature low';
+		var tempValue = document.createElement('span');
+		tempValue.className = 'value';
+		tempValue.textContent = item.main.temp_min;
+		temperature.appendChild(tempValue);
+		var unit = document.createElement('span');
+		unit.className = 'unit';
+		if(units == 'metric') {
+			unit.textContent = 'C';
+			var celcius = document.createElement('sup');
+			celcius.textContent = 'o';
+			unit.insertBefore(celcius, unit.firstChild);
+		} else {
+			unit.textContent = 'F';
+		}
+		temperature.appendChild(unit);
+		td.appendChild(temperature);
+	})();
+
+
+
+	return td;
 }
 
 function dateNameByValue(type, value) {
@@ -380,10 +540,10 @@ function calculateImageUrl(icon) {
 			calculatedImageUrl += "night-stars.jpg";
 			break;
 		case '02d':
-			calculatedImageUrl += "day-cloudy.jpg";
+			calculatedImageUrl += "day-sunny.jpg";
 			break;
 		case '02n':
-			calculatedImageUrl += "night-cloudy.jpg";
+			calculatedImageUrl += "night-stars.jpg";
 			break;
 		case '03d':
 		case '03n':
@@ -428,6 +588,3 @@ function calculateImageUrl(icon) {
 	}
 	return calculatedImageUrl;
 }
-
-
-

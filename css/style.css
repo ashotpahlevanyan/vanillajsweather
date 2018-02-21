@@ -315,10 +315,10 @@ nav {
   font-size: 60px;
 }
 .darkWeatherHourly .weatherWrapper .content .otherData {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   margin: 0;
-  padding: 15px 0 15px;
+  padding: 10px 0;
   font-size: 0;
 }
 .darkWeatherHourly .weatherWrapper .content .otherData li {
@@ -472,6 +472,10 @@ nav {
 .darkWeatherHourly .weatherWrapper .humidity i.wi {
   font-size: 20px;
   color: #d85400;
+}
+
+.dbOperations {
+  padding: 15px 0;
 }
 
 /*# sourceMappingURL=style.css.map */

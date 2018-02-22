@@ -11,7 +11,7 @@ const DB_STORE_NAME = 'cities';
 
 
 
-(function() {
+var db;
 
 //Local IndexedDB Database
 
@@ -28,40 +28,41 @@ function checkIDBSupport() {
 	}
 }
 
-// openIDB();
+
 // clearObjectStore(DB_STORE_NAME);
 
-var db;
 
 /// !!!!!!!!!!!! db name
 function openIDB() {
+	if(!checkIDBSupport()) {
+		console.log('IndexedDB not supported.');
+		return;
+	}
 	console.log('openIDB ...');
-	if(checkIDBSupport()) {
-		var requestIDB = window.indexedDB.open(DB_NAME, 3);
+	var requestIDB = window.indexedDB.open(DB_NAME);
 
-		requestIDB.onerror = function(event) {
-			alert('Could not open a database');
+	requestIDB.onsuccess = function(event) {
+		console.log('Database is opened, we can now store data there!');
+		db = event.target.result;
+		if(db) {
+			db.onerror = function(event) {
+				alert("Database error: " + event.target.errorCode);
+			};
+			console.log('openIDB Done');
 		}
+	}
 
-		requestIDB.onsuccess = function(event) {
-			console.log('Database is opened, we can now store data there!');
-			db = event.target.result;
-			if(db) {
-				db.onerror = function(event) {
-					alert("Database error: " + event.target.errorCode);
-				};
-				console.log('openIDB Done');
-			}
-		}
+	requestIDB.onerror = function(event) {
+		console.log('Could not open a database');
+	}
 
-		requestIDB.onupgradeneeded = function(event) {
-			console.log('IDB.upgradeneeded...');
+	requestIDB.onupgradeneeded = function(event) {
+		console.log('IDB.upgradeneeded...');
 
-			var store = db.createObjectStore("cities", { keyPath: "uniqueId" });
+		var store = db.createObjectStore(DB_STORE_NAME, { keyPath: "uniqueId" });
 
-			store.createIndex("uniqueId", "uniqueId", { unique: true });
-			store.createIndex("value", "value", { unique: false });
-		}
+		store.createIndex("uniqueId", "uniqueId", { unique: true });
+		store.createIndex("value", "value", { unique: false });
 	}
 }
 
@@ -71,9 +72,9 @@ function getObjectStore(storeName, mode) {
 }
 
 function addDataToDb(weather) {
-	var uniqueId = generateId(weather.coord.lat, weather.coord.lon);
+	var uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
 	var obj = {'uniqueId' : uniqueId, 'value': weather};
-
+	console.log(obj);
 	var store = getObjectStore(DB_STORE_NAME, 'readwrite');
    var requestIDB;
 
@@ -215,7 +216,7 @@ function cleanupObjectStore(store) {
 // createIDB(checkIDBSupport());
 
 
-})();
+
 
 //logic for idb storage
 
@@ -256,6 +257,7 @@ document.addEventListener('DOMContentLoaded', domContentLoaded);
 document.addEventListener('DOMContentLoaded', showHideWrapper);
 
 function domContentLoaded() {
+	openIDB();
 	navigator.geolocation.getCurrentPosition(weatherByPosition);
 }
 
@@ -327,6 +329,7 @@ function displayForecast(weather) {
 	console.log(weather);
 	//result.textContent = JSON.stringify(weather);
 	enhanceWeather(weather);
+	addDataToDb(weather);
 	updateForecast(weather, window.innerWidth || document.documentElement.clientWidth 
 				|| document.body.clientWidth);
 }

@@ -475,7 +475,11 @@ nav {
 }
 
 .dbOperations {
+  text-align: right;
   padding: 15px 0;
+}
+.dbOperations .btn + .btn {
+  margin-left: 10px;
 }
 
 /*# sourceMappingURL=style.css.map */

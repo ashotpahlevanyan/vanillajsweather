@@ -3,7 +3,8 @@
 let API_KEY = "468f937be26c4d91fe63cc0f4b7c0c12";
 let apiUrl = "http://api.openweathermap.org/data/2.5/";
 let units = 'metric'; //imperial, standard
-const OBSOLETE = 3 * 60000; // 30 mins
+const OBSOLETE_MINUTES = 1;
+const OBSOLETE = OBSOLETE_MINUTES * 60000;
 const DB_NAME = 'WeatherDatabase';
 const DB_STORE_NAME = 'cities';
 const DB_VERSION = 3;
@@ -21,14 +22,16 @@ let forecastWeather;
 let weatherWrapper = document.querySelector('.weatherWrapper');
 let searchForm = document.querySelector('.form');
 let result = document.querySelector('.result');
+let deleteIDBBtn = document.querySelector('.deleteIDB');
+let cleanupIDBBtn = document.querySelector('.cleanupIDB');
 
 // DOM Element Event handlers
 
 document.addEventListener('DOMContentLoaded', domContentLoaded);
 
-document.addEventListener('DOMContentLoaded', showHideWrapper);
-
 function domContentLoaded() {
+	showHideWrapper();
+	openIDB();
 	navigator.geolocation.getCurrentPosition(weatherByPosition);
 }
 
@@ -39,9 +42,20 @@ searchForm.addEventListener('submit', function(e) {
 	weatherByCityId(searchInput.value.trim());
 });
 
-/*
-	XHR Call function versions
-*/
+deleteIDBBtn.addEventListener('click', function(e) {
+	clearObjectStore();
+});
+
+clecnupIDBBtn.addEventListener('click', function(e) {
+	cleanupObjectStore();
+});
+
+
+/**
+ * XHR Call function versions
+ * 
+ */
+
 function weatherByPosition(position){
 	let url = apiUrl + 'weather?lat=' + 
 		position.coords.latitude + 
@@ -86,9 +100,9 @@ function XHRCall(url, type, cb) {
 	request.send();
 }
 
-/*
-	Display Functions
-*/
+/**
+ * Display Functions
+ */
 
 function displayCurrent(weather) {
 	console.log(weather);
@@ -111,7 +125,6 @@ function showHideWrapper() {
 	var tableWrapper = document.querySelector('.tableWrapper');
 	if(current.firstChild || tableWrapper.firstChild) {
 		weatherWrapper.style.display = 'block';
-		console.log('block');
 	} else {
 		weatherWrapper.style.display = 'none';
 	}
@@ -409,9 +422,6 @@ function createCell(item) {
  * 
  */
 
-
-//Local IndexedDB Database
-
 function checkIDBSupport() {
 	window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 	window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
@@ -436,6 +446,7 @@ function openIDB() {
 		db = this.result;
 		console.log("openDb DONE");
 	};
+
 	req.onerror = function (evt) {
 		console.error("openDb:", evt.target.errorCode);
 	};
@@ -463,7 +474,7 @@ function addDataToDb(weather) {
 	if(!store) {
 		console.log('could not get an object store, cannot add data to db');
 	}
-   var requestIDB;
+	var requestIDB;
 
 	requestIDB = store.add(obj);
 
@@ -813,7 +824,7 @@ function generateId(lat, lon) {
 
 function isObsolete(id) {
 	if(!id) {
-		return false;
+		return true;
 	}
 	let date = new Date();
 	let arr = id.split('_');
@@ -840,5 +851,5 @@ function isUsableId(lat, lon, oldId) {
 }
 
 
-openIDB();
+
 

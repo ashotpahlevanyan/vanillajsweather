@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-	<div class="container darkWeatherHourly">
+	<div class="container darkWeatherHourly clearfix">
 		<form class="form" onSubmit="">
 				<div class="field">
 					<input type="text" name="search" class="form-control search" placeholder="Search your City" value="" onChange="" />
@@ -18,8 +18,9 @@
 		</form>
 		<!-- <div class="result">
 		</div> -->
-		<div class="dbOperations clearfix">
-			<button class="btn btn-danger float-right">Delete IndexedDB</button>
+		<div class="dbOperations">
+			<button class="btn btn-info cleanupIDB">Cleanup IndexedDB</button>
+			<button class="btn btn-danger deleteIDB">Delete IndexedDB</button>
 		</div>
 		
 		<div class="weatherWrapper">

@@ -100,6 +100,7 @@ function displayForecast(weather) {
 	console.log(weather);
 	//result.textContent = JSON.stringify(weather);
 	enhanceWeather(weather);
+	cleanupObjectStore();
 	addDataToDb(weather);
 	updateForecast(weather, window.innerWidth || document.documentElement.clientWidth 
 				|| document.body.clientWidth);
@@ -475,7 +476,7 @@ function addDataToDb(weather) {
 	};
 }
 
-function clearObjectStore(storeName) {
+function clearObjectStore() {
 	var store = getObjectStore(DB_STORE_NAME, 'readwrite');
 	var requestIDB = store.clear();
 
@@ -534,9 +535,10 @@ function cleanupObjectStore(store) {
 
 			requestIDB.onsuccess = function(event) {
 				var value = event.target.result;
-
-				if(isObsolete(value.uniqueID)) {
-					requestIDB = store.delete(value.uniqueID);
+				console.log(value);
+				console.log(cursor.key);
+				if(isObsolete(value.uniqueId)) {
+					requestIDB = store.delete(cursor.key);
 					requestIDB.onsuccess = function(event) {
 						console.log("obsolete data delete successful");
 					}
@@ -554,61 +556,10 @@ function cleanupObjectStore(store) {
 }
 
 
-	
-// function createIDB() {
-// 	if(idbSupported) {
-// 		var requestIDB = window.indexedDB.open("WeatherDatabase", 3);
-// 		var db;
-
-// 		requestIDB.onerror = function(event) {
-// 			alert('Could not open a database');
-// 		}
-
-// 		requestIDB.onsuccess = function(event) {
-// 			console.log('Database is opened, we can now store data there!');
-// 			db = event.target.result;
-// 			if(db) {
-// 				db.onerror = function(event) {
-// 					alert("Database error: " + event.target.errorCode);
-// 				};
-// 			}
-// 		}
-
-// 		requestIDB.onupgradeneeded = function(event) { 
-// 			// Save the IDBDatabase interface 
-// 			var db = event.target.result;
-
-// 			// Create an objectStore for this database
-// 			var objectStore = db.createObjectStore("cities", { keyPath: "uniqueId" });
-
-// 			objectStore.createIndex("uniqueId", "uniqueId", { unique: true });
-// 			objectStore.createIndex("name", "name", { unique: false });
-// 			objectStore.createIndex("latlng", "latlng", { unique: false });
-// 			objectStore.createIndex("value", "value", { unique: false });
-
-// 			objectStore.transaction.oncomplete = function(event) {
-// 				// Store values in the newly created objectStore.
-// 				var cityObjectStore = db.transaction("cities", "readwrite").objectStore("cities");
-// 				cityData.forEach(function(city) {
-// 					cityObjectStore.add(city);
-// 				});
-// 			};
-
-// 		};
-// 	}
-// }
-// Let us open our database
-
-// createIDB(checkIDBSupport());
-
-
-
-
-
-
-/*
-	Utility functions
-*/
+/**
+ * Utility functions
+ * 
+ */
 
 function getDateTime(dateString) {
 	let dateArr = dateString.split(' ');
@@ -891,4 +842,3 @@ function isUsableId(lat, lon, oldId) {
 
 openIDB();
 
-clearObjectStore();

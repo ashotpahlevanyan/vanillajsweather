@@ -438,9 +438,6 @@ function createCell(item) {
  * IndexedDB utility functions
  *
  * checkIDBSupport()
- * 
- *
- * 
  */
 
 function checkIDBSupport() {
@@ -553,58 +550,6 @@ function cleanupObjectStore() {
 		console.error("cleanup:", event.target.errorCode);
 	};
 }
-
-// function searchObjectStore(store, lat, lon) {
-// 	if (typeof store == 'undefined') {
-// 		store = getObjectStore(DB_STORE_NAME, 'readonly');
-// 	}
-
-// 	var requestIDB;
-// 	var results = [];
-
-// 	requestIDB = store.openCursor();
-// 	requestIDB.onsuccess = function(event) {
-// 		var cursor = event.target.result;
-
-// 		if(cursor) {
-// 			requestIDB = store.get(cursor.key);
-
-// 			requestIDB.onsuccess = function(event) {
-// 				var value = event.target.result;
-// 				if(isUsableId(lat, lon, value.uniqueID)) {
-// 					results.push(value);
-// 				}
-// 			}
-// 			cursor.continue();
-// 		}
-// 	}
-// 	return results;
-// }
-
-// function searchObjectStoreByCityId(cityId) {
-// 	store = getObjectStore(DB_STORE_NAME, 'readonly');
-
-// 	var requestIDB;
-
-// 	requestIDB = store.openCursor();
-// 	requestIDB.onsuccess = function(event) {
-// 		var cursor = event.target.result;
-
-// 		if(cursor) {
-// 			requestIDB = store.get(cursor.key);
-
-// 			requestIDB.onsuccess = function(event) {
-// 				var value = event.target.result;
-// 				console.log('value from cursor', value.uniqueId);
-// 				if(value.value.city.name == cityId && !isObsolete(value.uniqueId)) {
-// 					return value.value;
-// 				}
-// 			}
-// 			cursor.continue();
-// 		}
-// 	}
-// 	return null;
-// }
 
 
 

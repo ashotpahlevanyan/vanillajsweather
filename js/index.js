@@ -9,9 +9,7 @@ const DB_NAME = 'WeatherDatabase';
 const DB_STORE_NAME = 'cities';
 const DB_VERSION = 3;
 var db;
-let wSize = window.innerWidth 
-				|| document.documentElement.clientWidth 
-				|| document.body.clientWidth;
+let wSize;
 
 // let furl = apiUrl + '/forecast?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
 // let curl = apiUrl + '/weather?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
@@ -33,6 +31,9 @@ let cleanupIDBBtn = document.querySelector('.cleanupIDB');
 document.addEventListener('DOMContentLoaded', domContentLoaded);
 
 function domContentLoaded() {
+	wSize = window.innerWidth 
+				|| document.documentElement.clientWidth 
+				|| document.body.clientWidth;
 	showHideWrapper();
 	openIDB();
 	navigator.geolocation.getCurrentPosition(weatherByPosition);
@@ -60,15 +61,15 @@ searchForm.addEventListener('submit', function(e) {
 				}
 			}
 			cursor.continue();
+			console.log('corsor continue...');
+		}
+		if(list.length !== 0) {
+			console.log('list', list.length);
+			displayForecast(list[0]);
+		} else {
+			forecastByCityId(cityId);
 		}
 	}
-	if(list.length !== 0) {
-		console.log('list', list.length);
-		updateForecast(list[0], wSize);
-	} else {
-		forecastByCityId(cityId);
-	}
-	//cleanupObjectStore();
 });
 
 deleteIDBBtn.addEventListener('click', function(e) {
@@ -86,80 +87,20 @@ window.onresize = function(event) {
 }
 
 /**
- * XHR Call function versions
- * 
- */
-
-function weatherByPosition(position){
-	let url = apiUrl + 'weather?lat=' + 
-		position.coords.latitude + 
-		'&lon='+ position.coords.longitude + 
-		'&units=' + units + '&APPID=' + API_KEY;
-	XHRCall(url, 'json', displayCurrent);
-}
-
-function weatherByCityId(cityId){
-	let url = apiUrl + 'weather?q=' + 
-			cityId + '&units=' + units + 
-			'&APPID=' + API_KEY;
-	XHRCall(url, 'json', displayCurrent);
-}
-
-function forecastByCityId(cityId) {
-	let url = apiUrl + 'forecast?q=' + 
-				cityId + '&units=' + units + 
-				'&APPID=' + API_KEY;
-	XHRCall(url, 'json', displayForecast);
-}
-
-function forecastByPosition(position) {
-	let url = apiUrl + 'forecast?lat=' + 
-		position.coords.latitude + 
-		'&lon='+ position.coords.longitude + 
-		'&units=' + units + '&APPID=' + API_KEY;
-	XHRCall(url, 'json', displayForecast);
-}
-
-function XHRCall(url, type, cb) {
-	let request = new XMLHttpRequest();
-	request.open('GET', url);
-	request.responseType = type;
-	request.onload = function() {
-		if(request.status === 200) {
-			cb(request.response);
-		} else {
-			console.log(request.status + ': ' + request.statusText);
-		}
-	};
-	request.send();
-}
-
-/**
  * Display Functions
  */
 
 function displayCurrent(weather) {
-	//console.log(weather);
 	updateCurrent(weather);
 }
 
 function displayForecast(weather) {
-	forecastWeather = weather;
-	enhanceWeather(weather);
-	cleanupObjectStore();
-	addDataToDb(weather);
-	updateForecast(weather, window.innerWidth || document.documentElement.clientWidth 
-				|| document.body.clientWidth);
-}
-
-function showHideWrapper() {
-	var current = document.querySelector('.current');
-	var tableWrapper = document.querySelector('.tableWrapper');
-	if(current.firstChild || tableWrapper.firstChild) {
-		weatherWrapper.style.display = 'block';
-	} else {
-		weatherWrapper.style.display = 'none';
+	if(!weather.hasOwnProperty('map') || weather.map.size === 0) {
+		enhanceWeather(weather);
+		addDataToDb(weather);
+		console.log('added map prop');
 	}
+	updateForecast(weather);
 }
 
 function enhanceWeather(weather) {
@@ -299,15 +240,15 @@ function updateCurrent(weather){
 	showHideWrapper();
 }
 
-function updateForecast(forecastWeather, size){
-	if(!forecastWeather) {
+function updateForecast(weather){
+	if(!weather) {
 		return;
 	}
 	forecastTable = document.querySelector('.forecast');
 	if(forecastTable) {
 		forecastTable.parentNode.removeChild(forecastTable);
 	}
-	if(size > 768) {
+	if(wSize > 768) {
 		var forecastTable = document.createElement('table');
 		forecastTable.classList = 'table forecast';
 		var thead = document.createElement('thead');
@@ -334,7 +275,7 @@ function updateForecast(forecastWeather, size){
 		thead.appendChild(thr1);
 		thead.appendChild(thr2);
 		let index = 0;
-		for(const [key, value] of forecastWeather.map.entries()) {
+		for(const [key, value] of weather.map.entries()) {
 			let tbr = document.createElement('tr');
 			tbr.className = 'day';
 			let td1 = document.createElement('td');
@@ -433,6 +374,15 @@ function createCell(item) {
 	return td;
 }
 
+function showHideWrapper() {
+	var current = document.querySelector('.current');
+	var tableWrapper = document.querySelector('.tableWrapper');
+	if(current.firstChild || tableWrapper.firstChild) {
+		weatherWrapper.style.display = 'block';
+	} else {
+		weatherWrapper.style.display = 'none';
+	}
+}
 
 /**
  * IndexedDB utility functions
@@ -551,6 +501,55 @@ function cleanupObjectStore() {
 	};
 }
 
+
+/**
+ * XHR Call function versions
+ * 
+ */
+
+function weatherByPosition(position){
+	let url = apiUrl + 'weather?lat=' + 
+		position.coords.latitude + 
+		'&lon='+ position.coords.longitude + 
+		'&units=' + units + '&APPID=' + API_KEY;
+	XHRCall(url, 'json', displayCurrent);
+}
+
+function weatherByCityId(cityId){
+	let url = apiUrl + 'weather?q=' + 
+			cityId + '&units=' + units + 
+			'&APPID=' + API_KEY;
+	XHRCall(url, 'json', displayCurrent);
+}
+
+function forecastByCityId(cityId) {
+	let url = apiUrl + 'forecast?q=' + 
+				cityId + '&units=' + units + 
+				'&APPID=' + API_KEY;
+	XHRCall(url, 'json', displayForecast);
+}
+
+function forecastByPosition(position) {
+	let url = apiUrl + 'forecast?lat=' + 
+		position.coords.latitude + 
+		'&lon='+ position.coords.longitude + 
+		'&units=' + units + '&APPID=' + API_KEY;
+	XHRCall(url, 'json', displayForecast);
+}
+
+function XHRCall(url, type, cb) {
+	let request = new XMLHttpRequest();
+	request.open('GET', url);
+	request.responseType = type;
+	request.onload = function() {
+		if(request.status === 200) {
+			cb(request.response);
+		} else {
+			console.log(request.status + ': ' + request.statusText);
+		}
+	};
+	request.send();
+}
 
 
 /**
@@ -808,9 +807,6 @@ function generateId(lat, lon) {
 }
 
 function isObsolete(id) {
-	if(!id) {
-		return true;
-	}
 	let date = new Date();
 	let arr = id.split('_');
 	let diff = +date - parseInt(arr[0]);

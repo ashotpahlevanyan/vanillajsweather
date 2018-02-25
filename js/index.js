@@ -9,6 +9,9 @@ const DB_NAME = 'WeatherDatabase';
 const DB_STORE_NAME = 'cities';
 const DB_VERSION = 3;
 var db;
+let wSize = window.innerWidth 
+				|| document.documentElement.clientWidth 
+				|| document.body.clientWidth;
 
 // let furl = apiUrl + '/forecast?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
 // let curl = apiUrl + '/weather?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
@@ -38,18 +41,49 @@ function domContentLoaded() {
 searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
 	let searchInput = e.target.elements['search'];
-	forecastByCityId(searchInput.value.trim());
-	weatherByCityId(searchInput.value.trim());
+	let cityId = searchInput.value.trim();
+
+	let list = [];
+	store = getObjectStore(DB_STORE_NAME, 'readonly');
+	var requestIDB;
+	requestIDB = store.openCursor();
+	requestIDB.onsuccess = function(event) {
+		var cursor = event.target.result;
+		if(cursor) {
+			requestIDB = store.get(cursor.key);
+
+			requestIDB.onsuccess = function(event) {
+				var value = event.target.result;
+				console.log('value from cursor', value.uniqueId);
+				if(value.value.city.name == cityId && !isObsolete(value.uniqueId)) {
+					list.push(value.value);
+				}
+			}
+			cursor.continue();
+		}
+	}
+	if(list.length !== 0) {
+		console.log('list', list.length);
+		updateForecast(list[0], wSize);
+	} else {
+		forecastByCityId(cityId);
+	}
+	//cleanupObjectStore();
 });
 
 deleteIDBBtn.addEventListener('click', function(e) {
 	clearObjectStore();
 });
 
-clecnupIDBBtn.addEventListener('click', function(e) {
+cleanupIDBBtn.addEventListener('click', function(e) {
 	cleanupObjectStore();
 });
 
+window.onresize = function(event) {
+	wSize = window.innerWidth 
+			|| document.documentElement.clientWidth 
+			|| document.body.clientWidth;
+}
 
 /**
  * XHR Call function versions
@@ -105,14 +139,12 @@ function XHRCall(url, type, cb) {
  */
 
 function displayCurrent(weather) {
-	console.log(weather);
+	//console.log(weather);
 	updateCurrent(weather);
 }
 
 function displayForecast(weather) {
 	forecastWeather = weather;
-	console.log(weather);
-	//result.textContent = JSON.stringify(weather);
 	enhanceWeather(weather);
 	cleanupObjectStore();
 	addDataToDb(weather);
@@ -127,15 +159,6 @@ function showHideWrapper() {
 		weatherWrapper.style.display = 'block';
 	} else {
 		weatherWrapper.style.display = 'none';
-	}
-}
-
-window.onresize = function(event) {
-	var w = window.innerWidth 
-				|| document.documentElement.clientWidth 
-				|| document.body.clientWidth;
-	if(forecastWeather) {
-		updateForecast(forecastWeather, w);
 	}
 }
 
@@ -158,8 +181,6 @@ function enhanceWeather(weather) {
 		}
 	}
 	weather.map = map;
-	
-	console.log(weather);
 }
 
 function updateCurrent(weather){
@@ -435,7 +456,6 @@ function checkIDBSupport() {
 	}
 }
 
-
 function openIDB() {
 	if(!checkIDBSupport()) {
 		return;
@@ -499,10 +519,8 @@ function clearObjectStore() {
 	}
 }
 
-function searchObjectStore(store, lat, lon) {
-	if (typeof store == 'undefined') {
-		store = getObjectStore(DB_STORE_NAME, 'readonly');
-	}
+function cleanupObjectStore() {
+	store = getObjectStore(DB_STORE_NAME, 'readwrite');
 
 	var requestIDB;
 	var results = [];
@@ -518,53 +536,76 @@ function searchObjectStore(store, lat, lon) {
 			requestIDB.onsuccess = function(event) {
 				var value = event.target.result;
 
-				if(isUsableId(lat, lon, value.uniqueID)) {
-					results.push(value);
-				}
-			}
-		}
-		cursor.continue();
-	}
-	return results;
-}
-
-function cleanupObjectStore(store) {
-	if (typeof store == 'undefined') {
-		store = getObjectStore(DB_STORE_NAME, 'readwrite');
-	}
-
-	var requestIDB;
-	var results = [];
-
-	requestIDB = store.openCursor();
-	requestIDB.onsuccess = function(event) {
-		var cursor = event.target.result;
-
-		if(cursor) {
-			console.log('reading cursor data : ', cursor);
-			requestIDB = store.get(cursor.key);
-
-			requestIDB.onsuccess = function(event) {
-				var value = event.target.result;
-				console.log(value);
-				console.log(cursor.key);
 				if(isObsolete(value.uniqueId)) {
 					requestIDB = store.delete(cursor.key);
 					requestIDB.onsuccess = function(event) {
-						console.log("obsolete data delete successful");
+						console.log(value.uniqueId, " : obsolete data delete successful");
 					}
 					requestIDB.onerror = function(event) {
 						console.error("delete data:", event.target.errorCode);
 					}
 				}
 			}
+			cursor.continue();
 		}
-		cursor.continue();
 	}
 	requestIDB.onerror = function (event) {
 		console.error("cleanup:", event.target.errorCode);
 	};
 }
+
+// function searchObjectStore(store, lat, lon) {
+// 	if (typeof store == 'undefined') {
+// 		store = getObjectStore(DB_STORE_NAME, 'readonly');
+// 	}
+
+// 	var requestIDB;
+// 	var results = [];
+
+// 	requestIDB = store.openCursor();
+// 	requestIDB.onsuccess = function(event) {
+// 		var cursor = event.target.result;
+
+// 		if(cursor) {
+// 			requestIDB = store.get(cursor.key);
+
+// 			requestIDB.onsuccess = function(event) {
+// 				var value = event.target.result;
+// 				if(isUsableId(lat, lon, value.uniqueID)) {
+// 					results.push(value);
+// 				}
+// 			}
+// 			cursor.continue();
+// 		}
+// 	}
+// 	return results;
+// }
+
+// function searchObjectStoreByCityId(cityId) {
+// 	store = getObjectStore(DB_STORE_NAME, 'readonly');
+
+// 	var requestIDB;
+
+// 	requestIDB = store.openCursor();
+// 	requestIDB.onsuccess = function(event) {
+// 		var cursor = event.target.result;
+
+// 		if(cursor) {
+// 			requestIDB = store.get(cursor.key);
+
+// 			requestIDB.onsuccess = function(event) {
+// 				var value = event.target.result;
+// 				console.log('value from cursor', value.uniqueId);
+// 				if(value.value.city.name == cityId && !isObsolete(value.uniqueId)) {
+// 					return value.value;
+// 				}
+// 			}
+// 			cursor.continue();
+// 		}
+// 	}
+// 	return null;
+// }
+
 
 
 /**
@@ -818,7 +859,6 @@ function generateId(lat, lon) {
 	let date = new Date();
 	let res = +date;
 	res += '_' + lat + '_' + lon;
-	console.log(res);
 	return res;
 }
 
@@ -830,8 +870,10 @@ function isObsolete(id) {
 	let arr = id.split('_');
 	let diff = +date - parseInt(arr[0]);
 	if(diff <= OBSOLETE) {
+		console.log(id, ' is NOT obsolete');
 		return false;
 	} else {
+		console.log(id, ' is obsolete');
 		return true;
 	}
 }

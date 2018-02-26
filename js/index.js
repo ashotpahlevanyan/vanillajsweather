@@ -10,7 +10,7 @@ const DB_STORE_NAME = 'cities';
 const DB_VERSION = 3;
 var db;
 let wSize;
-
+let weatherList = [];
 // let furl = apiUrl + '/forecast?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
 // let curl = apiUrl + '/weather?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
 
@@ -28,8 +28,13 @@ let cleanupIDBBtn = document.querySelector('.cleanupIDB');
 
 // DOM Element Event handlers
 
-document.addEventListener('DOMContentLoaded', domContentLoaded);
-
+document.onreadystatechange = function() {
+	if(document.readyState === 'interactive') {
+		domContentLoaded();
+	} else if(document.readyState === 'complete') {
+		loadWeatherList();
+	}
+}
 function domContentLoaded() {
 	wSize = window.innerWidth 
 				|| document.documentElement.clientWidth 
@@ -39,73 +44,85 @@ function domContentLoaded() {
 	navigator.geolocation.getCurrentPosition(weatherByPosition);
 }
 
+
 searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
 	let searchInput = e.target.elements['search'];
 	let cityId = searchInput.value.trim();
+	let res = checkCityInList(cityId);
+	if(res) {
+		updateForecast(res);
+	} else {
+		forecastByCityId(cityId);
+	}
+	clearWeatherList();
 });
 
-function searchObjectStore(cityId) {
-	let list = [];
-	let store = getObjectStore(DB_STORE_NAME, 'readonly');
-	var requestIDB;
-	requestIDB = store.openCursor();
-	requestIDB.onsuccess = function(event) {
-		var cursor = event.target.result;
-		if(cursor) {
-			requestIDB = store.get(cursor.key);
+function checkCityInList(cityId) {
+	for(let i = 0; i < weatherList.length; i++) {
+		if(!isObsolete(weatherList[i].value.uniqueId) && 
+			cityId.toLowerCase() == weatherList[i].value.city.name.toLowerCase()) {
+				return weatherList[i];
+		}
+	}
+	return false;
+}
 
-			requestIDB.onsuccess = function(event) {
-				var value = event.target.result;
-				console.log('value from cursor', value.uniqueId);
-				if(value.value.city.name == cityId && !isObsolete(value.uniqueId)) {
-					displayForecast(value.value);
-					return;
-				}
+function synchronizeListWithDb() {
+	
+}
+
+function clearWeatherList() {
+	weatherList.filter(item => {isObsolete(item.uniquId)});
+	console.log(weatherList);
+}
+
+function loadWeatherList() {
+	let store = getObjectStore(DB_STORE_NAME, 'readonly');
+	let req;
+	req = store.openCursor();
+	req.onsuccess = function(event) {
+		let cursor = event.target.result;
+		if(cursor) {
+			req = store.get(cursor.key);
+			req.onsuccess = function(event) {
+				let value = event.target.result;
+				weatherList.push(value);
 			}
 			cursor.continue();
 		}
-		forecastByCityId(cityId);
 	}
 }
 
-function openCursor(cityId) {
-	return new Promise((resolve, reject) => {
-		let store = getObjectStore(DB_STORE_NAME, 'readonly');
-		let requestIDB;
-		requestIDB = store.openCursor();
-		requestIDB.onsuccess = (event) => resolve({'id': cityId, 'result': event.target.result, 'store': store });
-		requestIDB.onerror = () => reject('cursor not opened');
-	});
-}
-
-function processloop(obj) {
-	let cityId = obj.id;
-	let cursor = obj.result;
-	let store = obj.store;
-	let req;
-	if(cursor) {
-		req = store.get(cursor.key);
-
-		req.onsuccess = function(event) {
-			var value = event.target.result;
-			console.log('value from cursor', value.uniqueId);
-			if(value.value.city.name == cityId && !isObsolete(value.uniqueId)) {
-				displayForecast(value.value);
-				return;
-			}
-		}
-		cursor.continue();
-	}
-}
-
-function prom(res){
-	return new Promise((resolve, reject) => {
-
-	});
-}
-
-
+// function checkCityInDb(cityId) {
+// 	return new Promise((resolve, reject) => {
+// 		let list = [];
+// 		let store = getObjectStore(DB_STORE_NAME, 'readonly');
+// 		let requestIDB;
+// 		requestIDB = store.openCursor();
+// 		requestIDB.onsuccess = function(event) {
+// 			let cursor = event.target.result;
+// 			if(cursor) {
+// 				requestIDB = store.get(cursor.key);
+// 				requestIDB.onsuccess = function(event) {
+// 					let value = event.target.result;
+// 					console.log('value, ', value);
+// 					console.log(value.value.city.name);
+// 					console.log(cityId);
+// 					if(value.value.city.name.toLowerCase() == cityId.toLowerCase()) {
+// 						console.log('resolving');
+// 						resolve(value.value);
+// 					}
+// 				}
+// 				cursor.continue();
+// 			}
+// 			requestIDB.onerror = function(event) {
+// 				console.log('openCursor : ', event.target.errorCode);
+// 			}
+// 			reject('could not find the city weather');
+// 		}
+// 	});
+// }
 
 deleteIDBBtn.addEventListener('click', function(e) {
 	clearObjectStore();
@@ -130,10 +147,9 @@ function displayCurrent(weather) {
 }
 
 function displayForecast(weather) {
-	if(!weather.hasOwnProperty('map') || weather.map.size === 0) {
+	if(!weather.map) {
 		enhanceWeather(weather);
 		addDataToDb(weather);
-		console.log('added map prop');
 	}
 	updateForecast(weather);
 }

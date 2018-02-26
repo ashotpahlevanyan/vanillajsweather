@@ -43,9 +43,11 @@ searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
 	let searchInput = e.target.elements['search'];
 	let cityId = searchInput.value.trim();
+});
 
+function searchObjectStore(cityId) {
 	let list = [];
-	store = getObjectStore(DB_STORE_NAME, 'readonly');
+	let store = getObjectStore(DB_STORE_NAME, 'readonly');
 	var requestIDB;
 	requestIDB = store.openCursor();
 	requestIDB.onsuccess = function(event) {
@@ -57,20 +59,53 @@ searchForm.addEventListener('submit', function(e) {
 				var value = event.target.result;
 				console.log('value from cursor', value.uniqueId);
 				if(value.value.city.name == cityId && !isObsolete(value.uniqueId)) {
-					list.push(value.value);
+					displayForecast(value.value);
+					return;
 				}
 			}
 			cursor.continue();
-			console.log('corsor continue...');
 		}
-		if(list.length !== 0) {
-			console.log('list', list.length);
-			displayForecast(list[0]);
-		} else {
-			forecastByCityId(cityId);
-		}
+		forecastByCityId(cityId);
 	}
-});
+}
+
+function openCursor(cityId) {
+	return new Promise((resolve, reject) => {
+		let store = getObjectStore(DB_STORE_NAME, 'readonly');
+		let requestIDB;
+		requestIDB = store.openCursor();
+		requestIDB.onsuccess = (event) => resolve({'id': cityId, 'result': event.target.result, 'store': store });
+		requestIDB.onerror = () => reject('cursor not opened');
+	});
+}
+
+function processloop(obj) {
+	let cityId = obj.id;
+	let cursor = obj.result;
+	let store = obj.store;
+	let req;
+	if(cursor) {
+		req = store.get(cursor.key);
+
+		req.onsuccess = function(event) {
+			var value = event.target.result;
+			console.log('value from cursor', value.uniqueId);
+			if(value.value.city.name == cityId && !isObsolete(value.uniqueId)) {
+				displayForecast(value.value);
+				return;
+			}
+		}
+		cursor.continue();
+	}
+}
+
+function prom(res){
+	return new Promise((resolve, reject) => {
+
+	});
+}
+
+
 
 deleteIDBBtn.addEventListener('click', function(e) {
 	clearObjectStore();

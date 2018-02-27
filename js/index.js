@@ -1,4 +1,6 @@
-//Weather Api initial data
+/**
+ * Initial Variables and Constants
+ */
 
 let API_KEY = "468f937be26c4d91fe63cc0f4b7c0c12";
 let apiUrl = "http://api.openweathermap.org/data/2.5/";
@@ -8,25 +10,37 @@ const OBSOLETE = OBSOLETE_MINUTES * 60000;
 const DB_NAME = 'WeatherDatabase';
 const DB_STORE_NAME = 'cities';
 const DB_VERSION = 3;
-var db;
+let db;
 let wSize;
+
+/**
+ * let furl = apiUrl + '/forecast?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
+ *
+ * let curl = apiUrl + '/weather?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
+ *
+ * http://api.openweathermap.org/data/2.5/forecast?lat=40.1791857&lon=44.4991029&units=metric&APPID=468f937be26c4d91fe63cc0f4b7c0c12
+ */
+
+/**
+ * Storage variables
+ */
+
 let weatherList = [];
-// let furl = apiUrl + '/forecast?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
-// let curl = apiUrl + '/weather?q=' + cityId + '&units=' + units + '&APPID=' + API_KEY;
 
-// Storage variables
 
-let currentWeather;
-let forecastWeather;
+/**
+ * DOM elements
+ */
 
-// DOM elements
 let weatherWrapper = document.querySelector('.weatherWrapper');
 let searchForm = document.querySelector('.form');
 let result = document.querySelector('.result');
 let deleteIDBBtn = document.querySelector('.deleteIDB');
 let cleanupIDBBtn = document.querySelector('.cleanupIDB');
 
-// DOM Element Event handlers
+/**
+ * DOM Element Event handlers
+ */
 
 document.onreadystatechange = function() {
 	if(document.readyState === 'interactive') {
@@ -41,88 +55,16 @@ function domContentLoaded() {
 				|| document.body.clientWidth;
 	showHideWrapper();
 	openIDB();
-	navigator.geolocation.getCurrentPosition(weatherByPosition);
+	navigator.geolocation.getCurrentPosition(displayByPosition);
 }
-
 
 searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
 	let searchInput = e.target.elements['search'];
 	let cityId = searchInput.value.trim();
-	let res = checkCityInList(cityId);
-	if(res) {
-		updateForecast(res);
-	} else {
-		forecastByCityId(cityId);
-	}
-	clearWeatherList();
+	weatherByCityId(cityId);
+	forecastByCityId(cityId);
 });
-
-function checkCityInList(cityId) {
-	for(let i = 0; i < weatherList.length; i++) {
-		if(!isObsolete(weatherList[i].value.uniqueId) && 
-			cityId.toLowerCase() == weatherList[i].value.city.name.toLowerCase()) {
-				return weatherList[i];
-		}
-	}
-	return false;
-}
-
-function synchronizeListWithDb() {
-	
-}
-
-function clearWeatherList() {
-	weatherList.filter(item => {isObsolete(item.uniquId)});
-	console.log(weatherList);
-}
-
-function loadWeatherList() {
-	let store = getObjectStore(DB_STORE_NAME, 'readonly');
-	let req;
-	req = store.openCursor();
-	req.onsuccess = function(event) {
-		let cursor = event.target.result;
-		if(cursor) {
-			req = store.get(cursor.key);
-			req.onsuccess = function(event) {
-				let value = event.target.result;
-				weatherList.push(value);
-			}
-			cursor.continue();
-		}
-	}
-}
-
-// function checkCityInDb(cityId) {
-// 	return new Promise((resolve, reject) => {
-// 		let list = [];
-// 		let store = getObjectStore(DB_STORE_NAME, 'readonly');
-// 		let requestIDB;
-// 		requestIDB = store.openCursor();
-// 		requestIDB.onsuccess = function(event) {
-// 			let cursor = event.target.result;
-// 			if(cursor) {
-// 				requestIDB = store.get(cursor.key);
-// 				requestIDB.onsuccess = function(event) {
-// 					let value = event.target.result;
-// 					console.log('value, ', value);
-// 					console.log(value.value.city.name);
-// 					console.log(cityId);
-// 					if(value.value.city.name.toLowerCase() == cityId.toLowerCase()) {
-// 						console.log('resolving');
-// 						resolve(value.value);
-// 					}
-// 				}
-// 				cursor.continue();
-// 			}
-// 			requestIDB.onerror = function(event) {
-// 				console.log('openCursor : ', event.target.errorCode);
-// 			}
-// 			reject('could not find the city weather');
-// 		}
-// 	});
-// }
 
 deleteIDBBtn.addEventListener('click', function(e) {
 	clearObjectStore();
@@ -134,8 +76,70 @@ cleanupIDBBtn.addEventListener('click', function(e) {
 
 window.onresize = function(event) {
 	wSize = window.innerWidth 
-			|| document.documentElement.clientWidth 
-			|| document.body.clientWidth;
+		|| document.documentElement.clientWidth 
+		|| document.body.clientWidth;
+}
+
+/**
+ * In Memory Manipulation functions
+ */
+
+function loadWeatherList() {
+	let store = getObjectStore(DB_STORE_NAME, 'readonly');
+	let req;
+	req = store.openCursor();
+	req.onsuccess = function(event) {
+		let cursor = event.target.result;
+		if(cursor) {
+			req = store.get(cursor.key);
+			req.onsuccess = function(event) {
+				weatherList.push(event.target.result);
+			}
+			cursor.continue();
+		}
+	}
+}
+
+function checkCityInList(cityId) {
+	for(let i = 0; i < weatherList.length; i++) {
+		if(!isObsolete(weatherList[i].value.uniqueId) && 
+			cityId.toLowerCase() == weatherList[i].value.city.name.toLowerCase()) {
+				return weatherList[i];
+		}
+	}
+	return false;
+}
+
+function writeWeatherListToDb() {
+	var store = getObjectStore(DB_STORE_NAME, 'readwrite');
+	if(!store) {
+		console.log('could not get an object store, cannot add data to db');
+		return;
+	}
+
+	var req = store.clear();
+
+	req.onsuccess = function(event) {
+		console.log('database successfully deleted!');
+		for(let i = 0; i < weatherList.length; i++) {
+			req = store.add(weatherList[i]);
+
+			req.onsuccess = function (event) {
+				console.log("Insertion in DB successful");
+			};
+			
+			req.onerror = function() {
+				console.error("Insertion in DB error", this.error);
+			};
+		}
+	}
+	req.onerror = function(event) {
+		console.error("clearObjectStore:", event.target.errorCode);
+	}
+}
+
+function cleanupWeatherList() {
+	weatherList = weatherList.filter(item => {!isObsolete(item.uniqueId)});
 }
 
 /**
@@ -147,11 +151,18 @@ function displayCurrent(weather) {
 }
 
 function displayForecast(weather) {
-	if(!weather.map) {
-		enhanceWeather(weather);
-		addDataToDb(weather);
-	}
 	updateForecast(weather);
+}
+
+function prepareToDisplay(weather) {
+	enhanceWeather(weather);
+	let uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
+	let obj = {'uniqueId': uniqueId, 'weather': weather};
+	weatherList.push(obj);
+	console.log(weatherList);
+	displayForecast(weather);
+	//cleanupWeatherList();
+	writeWeatherListToDb();
 }
 
 function enhanceWeather(weather) {
@@ -173,6 +184,11 @@ function enhanceWeather(weather) {
 		}
 	}
 	weather.map = map;
+}
+
+function displayByPosition(position) {
+	weatherByPosition(position);
+	forecastByPosition(position);
 }
 
 function updateCurrent(weather){
@@ -439,6 +455,11 @@ function showHideWrapper() {
  * IndexedDB utility functions
  *
  * checkIDBSupport()
+ * openIDB()
+ * getObjectStore(storeName, mode)
+ * addDataToDb(weather)
+ * clearObjectStore()
+ * cleanupObjectStore()
  */
 
 function checkIDBSupport() {
@@ -475,22 +496,18 @@ function openIDB() {
 	  		DB_STORE_NAME, { keyPath: 'uniqueId'});
 
 		store.createIndex("uniqueId", "uniqueId", { unique: true });
-		store.createIndex("value", "value", { unique: false });
+		store.createIndex("weather", "weather", { unique: false });
 	}
-}
-
-function getObjectStore(storeName, mode) {
-	var transaction = db.transaction(storeName, mode);
-	return transaction.objectStore(storeName);
 }
 
 function addDataToDb(weather) {
 	var uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
-	var obj = {'uniqueId' : uniqueId, 'value': weather};
+	var obj = {'uniqueId' : uniqueId, 'weather': weather};
 	console.log(obj);
 	var store = getObjectStore(DB_STORE_NAME, 'readwrite');
 	if(!store) {
 		console.log('could not get an object store, cannot add data to db');
+		store;
 	}
 	var requestIDB;
 
@@ -503,6 +520,11 @@ function addDataToDb(weather) {
 	requestIDB.onerror = function() {
 		console.error("Insertion in DB error", this.error);
 	};
+}
+
+function getObjectStore(storeName, mode) {
+	var transaction = db.transaction(storeName, mode);
+	return transaction.objectStore(storeName);
 }
 
 function clearObjectStore() {
@@ -555,7 +577,12 @@ function cleanupObjectStore() {
 
 /**
  * XHR Call function versions
- * 
+ *
+ * weatherByPosition(position)
+ * weatherByCityId(cityId)
+ * forecastByPosition(position)
+ * forecastByCityId(cityId)
+ * XHRCall(url, type, cb)
  */
 
 function weatherByPosition(position){
@@ -573,19 +600,19 @@ function weatherByCityId(cityId){
 	XHRCall(url, 'json', displayCurrent);
 }
 
-function forecastByCityId(cityId) {
-	let url = apiUrl + 'forecast?q=' + 
-				cityId + '&units=' + units + 
-				'&APPID=' + API_KEY;
-	XHRCall(url, 'json', displayForecast);
-}
-
 function forecastByPosition(position) {
 	let url = apiUrl + 'forecast?lat=' + 
 		position.coords.latitude + 
 		'&lon='+ position.coords.longitude + 
 		'&units=' + units + '&APPID=' + API_KEY;
-	XHRCall(url, 'json', displayForecast);
+	XHRCall(url, 'json', prepareToDisplay);
+}
+
+function forecastByCityId(cityId) {
+	let url = apiUrl + 'forecast?q=' + 
+				cityId + '&units=' + units + 
+				'&APPID=' + API_KEY;
+	XHRCall(url, 'json', prepareToDisplay);
 }
 
 function XHRCall(url, type, cb) {
@@ -605,7 +632,13 @@ function XHRCall(url, type, cb) {
 
 /**
  * Utility functions
- * 
+ *
+ * getDateTime(dateString)
+ * dateNameByValue(type, value)
+ * calculateDirectionText(angle)
+ * calculateDirectionClass(angle)
+ * calculateSkyClass(icon)
+ * calculateImageUrl(icon)
  */
 
 function getDateTime(dateString) {
@@ -850,6 +883,15 @@ function calculateImageUrl(icon) {
 	return calculatedImageUrl;
 }
 
+/**
+ * DB Id manipulation functions
+ *
+ * generateId(lat, lon)
+ * isObsolete(id)
+ * isUsableId(lat, lon, oldId)
+ */
+
+
 function generateId(lat, lon) {
 	let date = new Date();
 	let res = +date;
@@ -883,7 +925,3 @@ function isUsableId(lat, lon, oldId) {
 		return false;
 	}
 }
-
-
-
-

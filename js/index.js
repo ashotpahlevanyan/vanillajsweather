@@ -62,8 +62,13 @@ searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
 	let searchInput = e.target.elements['search'];
 	let cityId = searchInput.value.trim();
-	weatherByCityId(cityId);
-	forecastByCityId(cityId);
+	let w = checkCityInList(cityId);
+	if(w) {
+		displayForecast(w.weather);
+	} else {
+		weatherByCityId(cityId);
+		forecastByCityId(cityId);
+	}
 });
 
 deleteIDBBtn.addEventListener('click', function(e) {
@@ -102,8 +107,8 @@ function loadWeatherList() {
 
 function checkCityInList(cityId) {
 	for(let i = 0; i < weatherList.length; i++) {
-		if(!isObsolete(weatherList[i].value.uniqueId) && 
-			cityId.toLowerCase() == weatherList[i].value.city.name.toLowerCase()) {
+		if(!isObsolete(weatherList[i].uniqueId) && 
+			cityId.toLowerCase() == weatherList[i].weather.city.name.toLowerCase()) {
 				return weatherList[i];
 		}
 	}
@@ -139,7 +144,7 @@ function writeWeatherListToDb() {
 }
 
 function cleanupWeatherList() {
-	weatherList = weatherList.filter(item => {!isObsolete(item.uniqueId)});
+	weatherList = weatherList.filter(item => !isObsolete(item.uniqueId));
 }
 
 /**
@@ -156,12 +161,12 @@ function displayForecast(weather) {
 
 function prepareToDisplay(weather) {
 	enhanceWeather(weather);
+	cleanupWeatherList();
 	let uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	weatherList.push(obj);
-	console.log(weatherList);
 	displayForecast(weather);
-	//cleanupWeatherList();
+	console.log(weatherList);
 	writeWeatherListToDb();
 }
 

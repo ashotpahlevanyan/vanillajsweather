@@ -8,7 +8,8 @@ let units = 'metric'; //imperial, standard
 const OBSOLETE_MINUTES = 1;
 const OBSOLETE = OBSOLETE_MINUTES * 60000;
 const DB_NAME = 'WeatherDatabase';
-const DB_STORE_NAME = 'cities';
+const DB_FORECASTS = 'forecasts';
+const DB_CURRENTS = 'currents';
 const DB_VERSION = 3;
 let db;
 let wSize;
@@ -25,7 +26,11 @@ let wSize;
  * Storage variables
  */
 
-let weatherList = [];
+let storage = {
+	'forecasts' : [],
+	'currents' : []
+};
+
 
 
 /**
@@ -46,7 +51,8 @@ document.onreadystatechange = function() {
 	if(document.readyState === 'interactive') {
 		domContentLoaded();
 	} else if(document.readyState === 'complete') {
-		loadWeatherList();
+		loadCurrents();
+		loadForecasts();
 	}
 }
 function domContentLoaded() {
@@ -62,11 +68,16 @@ searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
 	let searchInput = e.target.elements['search'];
 	let cityId = searchInput.value.trim();
-	let w = checkCityInList(cityId);
-	if(w) {
-		displayForecast(w.weather);
+	let res = checkCityInList(cityId);
+	if(res.current) {
+		displayCurrent(res.current.weather);
 	} else {
 		weatherByCityId(cityId);
+	}
+
+	if(res.forecast) {
+		displayForecast(res.forecast.weather);
+	} else {
 		forecastByCityId(cityId);
 	}
 });
@@ -89,8 +100,8 @@ window.onresize = function(event) {
  * In Memory Manipulation functions
  */
 
-function loadWeatherList() {
-	let store = getObjectStore(DB_STORE_NAME, 'readonly');
+function loadStorage(objectStore, array) {
+	let store = getObjectStore(objectStore, 'readonly');
 	let req;
 	req = store.openCursor();
 	req.onsuccess = function(event) {
@@ -98,25 +109,42 @@ function loadWeatherList() {
 		if(cursor) {
 			req = store.get(cursor.key);
 			req.onsuccess = function(event) {
-				weatherList.push(event.target.result);
+				array.push(event.target.result);
 			}
 			cursor.continue();
 		}
 	}
 }
 
-function checkCityInList(cityId) {
-	for(let i = 0; i < weatherList.length; i++) {
-		if(!isObsolete(weatherList[i].uniqueId) && 
-			cityId.toLowerCase() == weatherList[i].weather.city.name.toLowerCase()) {
-				return weatherList[i];
-		}
-	}
-	return false;
+function loadCurrents() {
+	loadStorage(DB_CURRENTS, storage.currents);
+}
+function loadForecasts() {
+	loadStorage(DB_FORECASTS, storage.forecasts);
 }
 
-function writeWeatherListToDb() {
-	var store = getObjectStore(DB_STORE_NAME, 'readwrite');
+function checkCityInList(cityId) {
+	let res = {
+		'current' : {},
+		'forecast' : {}
+	};
+	for(let i = 0; i < storage.forecasts.length; i++) {
+		if(!isObsolete(storage.forecasts[i].uniqueId) && 
+			cityId.toLowerCase() == storage.forecasts[i].weather.city.name.toLowerCase()) {
+				res.forecast = storage.forecasts[i];
+		}
+	}
+	for(let i = 0; i < storage.currents.length; i++) {
+		if(!isObsolete(storage.currents[i].uniqueId) && 
+			cityId.toLowerCase() == storage.currents[i].weather.name.toLowerCase()) {
+				res.current = storage.currents[i];
+		}
+	}
+	return res;
+}
+
+function writeStorageToDb(objectStore, array) {
+	var store = getObjectStore(objectStore, 'readwrite');
 	if(!store) {
 		console.log('could not get an object store, cannot add data to db');
 		return;
@@ -125,9 +153,9 @@ function writeWeatherListToDb() {
 	var req = store.clear();
 
 	req.onsuccess = function(event) {
-		console.log('database successfully deleted!');
-		for(let i = 0; i < weatherList.length; i++) {
-			req = store.add(weatherList[i]);
+		console.log('object storage successfully deleted!');
+		for(let i = 0; i < array.length; i++) {
+			req = store.add(array[i]);
 
 			req.onsuccess = function (event) {
 				console.log("Insertion in DB successful");
@@ -143,8 +171,20 @@ function writeWeatherListToDb() {
 	}
 }
 
-function cleanupWeatherList() {
-	weatherList = weatherList.filter(item => !isObsolete(item.uniqueId));
+function writeForecastsToDb() {
+	writeStorageToDb(DB_FORECASTS, storage.forecasts);
+}
+
+function writeCurrentsToDb() {
+	writeStorageToDb(DB_CURRENTS, storage.currents);
+}
+
+function cleanupForecasts() {
+	storage.forecasts = storage.forecasts.filter(item => !isObsolete(item.uniqueId));
+}
+
+function cleanupCurrents() {
+	storage.currents = storage.currents.filter(item => !isObsolete(item.uniqueId));
 }
 
 /**
@@ -159,15 +199,25 @@ function displayForecast(weather) {
 	updateForecast(weather);
 }
 
-function prepareToDisplay(weather) {
+function prepareForecastToDisplay(weather) {
 	enhanceWeather(weather);
-	cleanupWeatherList();
+	cleanupForecasts();
 	let uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
-	weatherList.push(obj);
+	storage.forecasts.push(obj);
 	displayForecast(weather);
-	console.log(weatherList);
-	writeWeatherListToDb();
+	console.log(storage.forecasts);
+	writeForecastsToDb();
+}
+
+function prepareCurrentToDisplay(weather) {
+	cleanupCurrents();
+	let uniqueId = generateId(weather.coord.lat, weather.coord.lon);
+	let obj = {'uniqueId': uniqueId, 'weather': weather};
+	storage.currents.push(obj);
+	displayCurrent(weather);
+	console.log(storage.currents);
+	writeCurrentsToDb();
 }
 
 function enhanceWeather(weather) {
@@ -498,10 +548,16 @@ function openIDB() {
 	req.onupgradeneeded = function (evt) {
 		console.log("openDb.onupgradeneeded");
 		var store = evt.currentTarget.result.createObjectStore(
-	  		DB_STORE_NAME, { keyPath: 'uniqueId'});
+	  		DB_FORECASTS, { keyPath: 'uniqueId'});
 
 		store.createIndex("uniqueId", "uniqueId", { unique: true });
 		store.createIndex("weather", "weather", { unique: false });
+
+		var storeC = evt.currentTarget.result.createObjectStore(
+	  		DB_CURRENTS, { keyPath: 'uniqueId'});
+
+		storeC.createIndex("uniqueId", "uniqueId", { unique: true });
+		storeC.createIndex("weather", "weather", { unique: false });
 	}
 }
 
@@ -509,7 +565,7 @@ function addDataToDb(weather) {
 	var uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
 	var obj = {'uniqueId' : uniqueId, 'weather': weather};
 	console.log(obj);
-	var store = getObjectStore(DB_STORE_NAME, 'readwrite');
+	var store = getObjectStore(DB_FORECASTS, 'readwrite');
 	if(!store) {
 		console.log('could not get an object store, cannot add data to db');
 		store;
@@ -533,7 +589,7 @@ function getObjectStore(storeName, mode) {
 }
 
 function clearObjectStore() {
-	var store = getObjectStore(DB_STORE_NAME, 'readwrite');
+	var store = getObjectStore(DB_FORECASTS, 'readwrite');
 	var requestIDB = store.clear();
 
 	requestIDB.onsuccess = function(event) {
@@ -545,7 +601,7 @@ function clearObjectStore() {
 }
 
 function cleanupObjectStore() {
-	store = getObjectStore(DB_STORE_NAME, 'readwrite');
+	store = getObjectStore(DB_FORECASTS, 'readwrite');
 
 	var requestIDB;
 	var results = [];
@@ -595,14 +651,14 @@ function weatherByPosition(position){
 		position.coords.latitude + 
 		'&lon='+ position.coords.longitude + 
 		'&units=' + units + '&APPID=' + API_KEY;
-	XHRCall(url, 'json', displayCurrent);
+	XHRCall(url, 'json', prepareCurrentToDisplay);
 }
 
 function weatherByCityId(cityId){
 	let url = apiUrl + 'weather?q=' + 
 			cityId + '&units=' + units + 
 			'&APPID=' + API_KEY;
-	XHRCall(url, 'json', displayCurrent);
+	XHRCall(url, 'json', prepareCurrentToDisplay);
 }
 
 function forecastByPosition(position) {
@@ -610,14 +666,14 @@ function forecastByPosition(position) {
 		position.coords.latitude + 
 		'&lon='+ position.coords.longitude + 
 		'&units=' + units + '&APPID=' + API_KEY;
-	XHRCall(url, 'json', prepareToDisplay);
+	XHRCall(url, 'json', prepareForecastToDisplay);
 }
 
 function forecastByCityId(cityId) {
 	let url = apiUrl + 'forecast?q=' + 
 				cityId + '&units=' + units + 
 				'&APPID=' + API_KEY;
-	XHRCall(url, 'json', prepareToDisplay);
+	XHRCall(url, 'json', prepareForecastToDisplay);
 }
 
 function XHRCall(url, type, cb) {

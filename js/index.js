@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Initial Variables and Constants
  */
@@ -70,12 +72,16 @@ searchForm.addEventListener('submit', function(e) {
 	let cityId = searchInput.value.trim();
 	let res = checkCityInList(cityId);
 	if(res.current) {
+		console.log('current is not empty');
+		console.log(res.current);
 		displayCurrent(res.current.weather);
 	} else {
 		weatherByCityId(cityId);
 	}
 
 	if(res.forecast) {
+		console.log('forecast is not empty');
+		console.log(res.forecast);
 		displayForecast(res.forecast.weather);
 	} else {
 		forecastByCityId(cityId);
@@ -83,11 +89,13 @@ searchForm.addEventListener('submit', function(e) {
 });
 
 deleteIDBBtn.addEventListener('click', function(e) {
-	clearObjectStore();
+	clearObjectStore(DB_FORECASTS);
+	clearObjectStore(DB_CURRENTS);
 });
 
 cleanupIDBBtn.addEventListener('click', function(e) {
-	cleanupObjectStore();
+	cleanupObjectStore(DB_FORECASTS);
+	cleanupObjectStore(DB_CURRENTS);
 });
 
 window.onresize = function(event) {
@@ -124,21 +132,24 @@ function loadForecasts() {
 }
 
 function checkCityInList(cityId) {
-	let res = {
-		'current' : {},
-		'forecast' : {}
-	};
+	let curr;
+	let forc;
+	let res = {};
 	for(let i = 0; i < storage.forecasts.length; i++) {
-		if(!isObsolete(storage.forecasts[i].uniqueId) && 
-			cityId.toLowerCase() == storage.forecasts[i].weather.city.name.toLowerCase()) {
-				res.forecast = storage.forecasts[i];
+		if(!isObsolete(storage.forecasts[i].uniqueId) && (cityId.toLowerCase() == storage.forecasts[i].weather.city.name.toLowerCase())) {
+				forc = storage.forecasts[i];
 		}
 	}
 	for(let i = 0; i < storage.currents.length; i++) {
-		if(!isObsolete(storage.currents[i].uniqueId) && 
-			cityId.toLowerCase() == storage.currents[i].weather.name.toLowerCase()) {
-				res.current = storage.currents[i];
+		if(!isObsolete(storage.currents[i].uniqueId) && (cityId.toLowerCase() == storage.currents[i].weather.name.toLowerCase())) {
+				curr = storage.currents[i];
 		}
+	}
+	if(curr) {
+		res.current = curr;
+	}
+	if(forc) {
+		res.forecast = forc;
 	}
 	return res;
 }
@@ -518,9 +529,9 @@ function showHideWrapper() {
  */
 
 function checkIDBSupport() {
-	window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-	window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
-	window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+	// indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+	// IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
+	// IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
 	if (!window.indexedDB) {
 		window.alert("Your browser doesn't support a stable version of IndexedDB. Some features elliminating HTTP request will not be available.");
@@ -588,8 +599,8 @@ function getObjectStore(storeName, mode) {
 	return transaction.objectStore(storeName);
 }
 
-function clearObjectStore() {
-	var store = getObjectStore(DB_FORECASTS, 'readwrite');
+function clearObjectStore(objectStore) {
+	var store = getObjectStore(objectStore, 'readwrite');
 	var requestIDB = store.clear();
 
 	requestIDB.onsuccess = function(event) {
@@ -600,8 +611,8 @@ function clearObjectStore() {
 	}
 }
 
-function cleanupObjectStore() {
-	store = getObjectStore(DB_FORECASTS, 'readwrite');
+function cleanupObjectStore(objectStore) {
+	store = getObjectStore(objectStore, 'readwrite');
 
 	var requestIDB;
 	var results = [];

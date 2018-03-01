@@ -72,16 +72,12 @@ searchForm.addEventListener('submit', function(e) {
 	let cityId = searchInput.value.trim();
 	let res = checkCityInList(cityId);
 	if(res.current) {
-		console.log('current is not empty');
-		console.log(res.current);
 		displayCurrent(res.current.weather);
 	} else {
 		weatherByCityId(cityId);
 	}
 
 	if(res.forecast) {
-		console.log('forecast is not empty');
-		console.log(res.forecast);
 		displayForecast(res.forecast.weather);
 	} else {
 		forecastByCityId(cityId);
@@ -157,6 +153,7 @@ function checkCityInList(cityId) {
 function writeStorageToDb(objectStore, array) {
 	var store = getObjectStore(objectStore, 'readwrite');
 	if(!store) {
+		//$.notify({message: 'could not get an object store, cannot add data to db'},{type: 'danger'})
 		console.log('could not get an object store, cannot add data to db');
 		return;
 	}
@@ -164,16 +161,23 @@ function writeStorageToDb(objectStore, array) {
 	var req = store.clear();
 
 	req.onsuccess = function(event) {
-		console.log('object storage successfully deleted!');
+		// $.notify({message: 'Object storage successfully deleted!'},
+		// 			{type: 'success'});
+		console.log('Object storage successfully deleted!');		
+
 		for(let i = 0; i < array.length; i++) {
 			req = store.add(array[i]);
 
 			req.onsuccess = function (event) {
-				console.log("Insertion in DB successful");
+				//$.notify({message: 'Insertion in DB successful'},
+					//{type: 'success'});
+				console.log('Insertion in DB successful!');
 			};
 			
 			req.onerror = function() {
-				console.error("Insertion in DB error", this.error);
+				//$.notify({message: 'Insertion in DB error'},
+					//{type: 'danger'});
+				console.log('Insertion in DB error!');
 			};
 		}
 	}
@@ -217,7 +221,6 @@ function prepareForecastToDisplay(weather) {
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	storage.forecasts.push(obj);
 	displayForecast(weather);
-	//console.log(storage.forecasts);
 	writeForecastsToDb();
 }
 
@@ -227,7 +230,6 @@ function prepareCurrentToDisplay(weather) {
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	storage.currents.push(obj);
 	displayCurrent(weather);
-	//console.log(storage.currents);
 	writeCurrentsToDb();
 }
 
@@ -545,15 +547,21 @@ function openIDB() {
 	if(!checkIDBSupport()) {
 		return;
 	}
+	//$.notify({message: 'openIDB ...'},
+					//{type: 'info'});
 	console.log('openIDB ...');
 	var req = indexedDB.open(DB_NAME, DB_VERSION);
 	req.onsuccess = function (evt) {
 		db = this.result;
-		console.log("openDb DONE");
+		//$.notify({message: 'openDb DONE'},
+					//{type: 'success'});
+		console.log('openDb DONE');
 	};
 
 	req.onerror = function (evt) {
-		console.error("openDb:", evt.target.errorCode);
+		//$.notify({message: "openDb: " + evt.target.errorCode},
+					//{type: 'danger'});
+		console.log('openDb: ', evt.target.errorCode);
 	};
 
 	req.onupgradeneeded = function (evt) {
@@ -976,10 +984,8 @@ function isObsolete(id) {
 	let arr = id.split('_');
 	let diff = +date - parseInt(arr[0]);
 	if(diff <= OBSOLETE) {
-		//console.log(id, ' is NOT obsolete');
 		return false;
 	} else {
-		//console.log(id, ' is obsolete');
 		return true;
 	}
 }

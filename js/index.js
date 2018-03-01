@@ -63,7 +63,7 @@ function domContentLoaded() {
 				|| document.body.clientWidth;
 	showHideWrapper();
 	openIDB();
-	navigator.geolocation.getCurrentPosition(displayByPosition);
+	navigator.geolocation.getCurrentPosition(weatherByPosition);
 }
 
 searchForm.addEventListener('submit', function(e) {
@@ -217,7 +217,7 @@ function prepareForecastToDisplay(weather) {
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	storage.forecasts.push(obj);
 	displayForecast(weather);
-	console.log(storage.forecasts);
+	//console.log(storage.forecasts);
 	writeForecastsToDb();
 }
 
@@ -227,7 +227,7 @@ function prepareCurrentToDisplay(weather) {
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	storage.currents.push(obj);
 	displayCurrent(weather);
-	console.log(storage.currents);
+	//console.log(storage.currents);
 	writeCurrentsToDb();
 }
 
@@ -612,7 +612,7 @@ function clearObjectStore(objectStore) {
 }
 
 function cleanupObjectStore(objectStore) {
-	store = getObjectStore(objectStore, 'readwrite');
+	let store = getObjectStore(objectStore, 'readwrite');
 
 	var requestIDB;
 	var results = [];
@@ -976,10 +976,10 @@ function isObsolete(id) {
 	let arr = id.split('_');
 	let diff = +date - parseInt(arr[0]);
 	if(diff <= OBSOLETE) {
-		console.log(id, ' is NOT obsolete');
+		//console.log(id, ' is NOT obsolete');
 		return false;
 	} else {
-		console.log(id, ' is obsolete');
+		//console.log(id, ' is obsolete');
 		return true;
 	}
 }

@@ -228,12 +228,12 @@ nav {
   padding: 10px 0;
 }
 .darkWeatherHourly .form .search {
-  -webkit-border-radius: 30px;
-  -khtml-border-radius: 30px;
-  -moz-border-radius: 30px;
-  -ms-border-radius: 30px;
-  -o-border-radius: 30px;
-  border-radius: 30px;
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
   height: 60px;
   line-height: 1.5;
   font-size: 20px;
@@ -252,7 +252,12 @@ nav {
   background-color: #009ad8;
   color: #fff;
   cursor: pointer;
-  border-radius: 26px;
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
   border: none;
   height: 50px;
   padding: 10px 40px;
@@ -489,6 +494,58 @@ nav {
 }
 .dbOperations .btn + .btn {
   margin-left: 10px;
+}
+
+.mobileView {
+  color: #323544;
+}
+.mobileView .currentHeader {
+  background-color: #2c2f3d;
+  color: #bfc1c8;
+  padding: 15px 10px;
+  margin-top: 0;
+  font-size: 20px;
+}
+.mobileView .item {
+  color: #bfc1c8;
+  font-size: 0;
+}
+.mobileView .item:nth-last-child(2n) {
+  background-color: #414762;
+}
+.mobileView .item:nth-last-child(2n-1) {
+  background-color: #323544;
+}
+.mobileView .item li {
+  font-size: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.mobileView .item .daytime {
+  font-size: 20px;
+  padding: 10px 10px;
+  width: 28.33%;
+}
+.mobileView .item .hour {
+  width: 35.33%;
+  padding: 10px 5px;
+  text-align: center;
+}
+.mobileView .item .sky {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 5px 0;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  color: #009ad8;
+  font-size: 30px;
+}
+.mobileView .item .temperature {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 5px 0;
+  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */

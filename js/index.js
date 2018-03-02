@@ -1,3 +1,6 @@
+(function() {
+
+
 'use strict';
 
 /**
@@ -6,8 +9,8 @@
 
 let API_KEY = "468f937be26c4d91fe63cc0f4b7c0c12";
 let apiUrl = "http://api.openweathermap.org/data/2.5/";
-let units = 'metric'; //imperial, standard
-const OBSOLETE_MINUTES = 1;
+let units = 'metric'; //metric, imperial, standard
+const OBSOLETE_MINUTES = 3;
 const OBSOLETE = OBSOLETE_MINUTES * 60000;
 const DB_NAME = 'WeatherDatabase';
 const DB_FORECASTS = 'forecasts';
@@ -99,6 +102,15 @@ window.onresize = function(event) {
 		|| document.documentElement.clientWidth 
 		|| document.body.clientWidth;
 }
+
+document.querySelector('.toggle').addEventListener('click', function(event) {
+	let items = this.parentElement.querySelector('.items');
+	if(items.style.display == 'none') {
+		items.style.display = 'block';
+	} else {
+		items.style.display = 'none';
+	}
+});
 
 /**
  * In Memory Manipulation functions
@@ -1003,3 +1015,5 @@ function isUsableId(lat, lon, oldId) {
 		return false;
 	}
 }
+
+})();

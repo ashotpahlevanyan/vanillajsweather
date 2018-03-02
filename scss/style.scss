@@ -46,6 +46,7 @@ $colorWind: #96d800;
 $colorHumidity: #d85400;
 $ffRoboto: "Roboto", "Open Sans", sans-serif;
 $colorFontGrey: #bfc1c8;
+$colorGreyLight: #e1e1e1;
 $fsBase: 14px;
 $fsSmall: 10px;
 $fsMiddle: 20px;
@@ -91,7 +92,8 @@ $fsGiant: 60px;
 		margin-bottom: 30px;
 		padding: 10px 0;
 		.search {
-			@include border-radius(30px);
+			//@include border-radius(30px);
+			@include border-radius(10px);
 			height: 60px;
 			line-height: 1.5;
 			font-size: $fsMiddle;
@@ -110,7 +112,8 @@ $fsGiant: 60px;
 			background-color: $colorLightBlue;
 			color: $colorWhite;
 			cursor: pointer;
-			border-radius: 26px;
+			//@include border-radius(26px);
+			@include border-radius(10px);
 			border: none;
 			height: 50px;
 			padding: 10px 40px;
@@ -312,6 +315,61 @@ $fsGiant: 60px;
 	padding: 15px 0;
 	.btn + .btn {
 		margin-left: 10px;
+	}
+}
+
+.mobileView {
+	color: $colorBlue;
+	.currentHeader {
+		background-color: $colorHeader;
+		color: $colorFontGrey;
+		padding: 15px 10px;
+		//@include border-radius-separate(10px, 10px, 0, 0);
+		margin-top: 0;
+		font-size: $fsMiddle;
+	}
+	.item {
+		color: $colorFontGrey;
+		&:nth-last-child(2n) {
+			background-color: $colorMainBgAlt;
+		}
+		&:nth-last-child(2n-1 ) {
+			background-color: $colorMainBg;
+		}
+
+		
+		font-size: 0;
+		li {
+			font-size: $fsMiddle;
+			display: inline-block;
+			vertical-align: middle;
+		}
+		.daytime {
+			font-size: $fsMiddle;
+			padding: 10px 10px;
+			width: 28.33%;
+		}
+		.hour {
+			width: 35.33%;
+			padding: 10px 5px;
+			text-align : center;
+		}
+		.sky {
+			display: inline-block;
+			vertical-align: middle;
+			padding: 5px 0;
+			margin-right: 10px;
+			margin-bottom: 5px;
+			color: $colorLightBlue;
+			font-size: $fsLarge;
+		}
+		.temperature {
+			display: inline-block;
+			vertical-align: middle;
+			padding: 5px 0;
+			margin-right: 10px;
+			margin-bottom: 5px;
+		}
 	}
 }
 

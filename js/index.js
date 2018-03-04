@@ -103,14 +103,19 @@ window.onresize = function(event) {
 		|| document.body.clientWidth;
 }
 
-document.querySelector('.toggle').addEventListener('click', function(event) {
-	let items = this.parentElement.querySelector('.items');
-	if(items.style.display == 'none') {
-		items.style.display = 'block';
-	} else {
-		items.style.display = 'none';
-	}
-});
+function initializeToggles() {
+	let togglesList = document.querySelectorAll('.toggle');
+	togglesList.forEach(function(item) {item.addEventListener('click', function(event) {
+		event.preventDefault();
+		let items = this.parentNode.querySelector('.items');
+		if(items.style.display == 'none') {
+			items.style.display = 'block';
+		} else {
+			items.style.display = 'none';
+		}
+	})});
+}
+
 
 /**
  * In Memory Manipulation functions
@@ -391,11 +396,12 @@ function updateForecast(weather){
 	if(!weather) {
 		return;
 	}
-	forecastTable = document.querySelector('.forecast');
-	if(forecastTable) {
-		forecastTable.parentNode.removeChild(forecastTable);
-	}
+	
 	if(wSize > 768) {
+		var forecastTableOld = document.querySelector('.forecast');
+		if(forecastTableOld) {
+			forecastTableOld.parentNode.removeChild(forecastTableOld);
+		}
 		var forecastTable = document.createElement('table');
 		forecastTable.classList = 'table forecast';
 		var thead = document.createElement('thead');
@@ -460,8 +466,115 @@ function updateForecast(weather){
 		}
 		
 		weatherWrapper.appendChild(forecastTable);
-	} else {
 
+	} else {
+		var mobileViewOld = document.querySelector('.mobileView');
+		if(mobileViewOld) {
+			mobileViewOld.parentNode.removeChild(mobileViewOld);
+		}
+		let mobileView = document.createElement('div');
+		mobileView.className = 'mobileView';
+
+		let mobile = document.createElement('ul');
+		mobile.className = 'mobile';
+
+		mobileView.appendChild(mobile);
+
+		for(let i = 0; i < 5; i++) {
+			let day = document.createElement('li');
+			day.className = 'day';
+
+			let toggle = document.createElement('a');
+			toggle.className = 'toggle';
+
+			let currentHeader = document.createElement('h4');
+			currentHeader.classList = 'currentHeader clearfix';
+
+			let weekday = document.createElement('span');
+			weekday.classList = 'day float-left';
+			weekday.textContent = 'Friday';
+
+			let monthday = document.createElement('span');
+			monthday.classList = 'day float-right';
+			monthday.textContent = '2 Mar';
+
+			currentHeader.appendChild(weekday);
+			currentHeader.appendChild(monthday);
+			toggle.appendChild(currentHeader);
+			day.appendChild(toggle);
+
+
+			let items = document.createElement('div');
+			items.className = 'items';
+
+			for(let j = 0; j < 4; j++) {
+				let item = document.createElement('ul');
+				item.className = 'item';
+
+				let daytime = document.createElement('li');
+				daytime.className = 'daytime';
+				daytime.textContent = 'Night';
+
+				item.appendChild(daytime);
+
+				for(let k = 0; k < 2; k++) {
+
+					let hour = document.createElement('li');
+					hour.className = 'hour';
+
+					let time = document.createElement('span');
+					time.className = 'time';
+
+					hour.appendChild(time);
+
+					let sky = document.createElement('div');
+					sky.className = 'sky';
+
+					let icon = document.createElement('i');
+					icon.classList = 'wi wi-cloud';
+
+					sky.appendChild(icon);
+					hour.appendChild(sky);
+
+					let tempH = document.createElement('div');
+					tempH.classList = 'temperature high';
+					let valueH = document.createElement('span');
+					valueH.className = 'value';
+					valueH.textContent = '7.18';
+
+					let unitH = document.createElement('span');
+					unitH.className = 'unit';
+
+					tempH.appendChild(valueH);
+					tempH.appendChild(unitH);
+
+
+					let tempL = document.createElement('div');
+					tempL.classList = 'temperature low';
+					let valueL = document.createElement('span');
+					valueL.className = 'value';
+					valueL.textContent = '3.18';
+
+					let unitL = document.createElement('span');
+					unitL.className = 'unit';
+					
+					tempL.appendChild(valueL);
+					tempL.appendChild(unitL);
+
+					hour.appendChild(tempH);
+					hour.appendChild(tempL);
+					item.appendChild(hour);
+				}
+
+			items.appendChild(item);
+			}
+
+			day.appendChild(items);
+			mobile.appendChild(day);
+		}
+		let weatherWrapper = document.querySelector('.weatherWrapper');
+		weatherWrapper.appendChild(mobileView);
+		initializeToggles();
 	}
 
 	showHideWrapper();

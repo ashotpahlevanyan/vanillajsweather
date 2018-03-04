@@ -40,6 +40,7 @@ $colorMainBg: #323544;
 $colorMainBgAlt: #414762;
 $colorDarkBg: #252733;
 $colorSuperDarkBlue: #1e202b;
+$colorMiddleBlue: #5562a1;
 $colorHeader: #2c2f3d;
 $colorHover: #464c66;
 $colorWind: #96d800;
@@ -50,6 +51,7 @@ $colorGreyLight: #e1e1e1;
 $fsBase: 14px;
 $fsSmall: 10px;
 $fsMiddle: 20px;
+$fsNormal: 25px;
 $fsLarge: 30px;
 $fsHuge: 45px;
 $fsGiant: 60px;
@@ -60,8 +62,10 @@ $fsGiant: 60px;
 
 @media (max-width: 768px) {
 	.container, .container-fluid {
-		margin: 0 !important;
+		margin: 0 auto !important;
 		padding: 0 !important;
+		width: 100% !important;
+		min-width: 100%;
 	}
 }
 
@@ -326,19 +330,20 @@ $fsGiant: 60px;
 		padding: 15px 10px;
 		//@include border-radius-separate(10px, 10px, 0, 0);
 		margin-top: 0;
-		font-size: $fsMiddle;
+		font-size: $fsNormal;
+		border-bottom: 2px solid $colorGreyLight;
 	}
 	.item {
 		color: $colorFontGrey;
+		font-size: 0;
 		&:nth-last-child(2n) {
 			background-color: $colorMainBgAlt;
 		}
 		&:nth-last-child(2n-1 ) {
-			background-color: $colorMainBg;
+			background-color: $colorMiddleBlue;
 		}
 
 		
-		font-size: 0;
 		li {
 			font-size: $fsMiddle;
 			display: inline-block;
@@ -351,8 +356,16 @@ $fsGiant: 60px;
 		}
 		.hour {
 			width: 35.33%;
-			padding: 10px 5px;
+			padding: 25px 5px 10px;
 			text-align : center;
+			position: relative;
+		}
+		.time{
+			position: absolute;
+			top: 2px;
+			right: 5px;
+			color: orange;
+			font-size: $fsBase;
 		}
 		.sky {
 			display: inline-block;
@@ -369,7 +382,67 @@ $fsGiant: 60px;
 			padding: 5px 0;
 			margin-right: 10px;
 			margin-bottom: 5px;
+			&.high {
+				font-size: $fsNormal;
+			}
 		}
 	}
 }
 
+@media (max-width: 768px) {
+	.darkWeatherHourly {
+		.weatherWrapper {
+			.content {
+				.otherData {
+					padding: 5px 0;
+					li {
+						font-size: $fsMiddle;
+						i {
+							display: block;
+							font-size: $fsLarge;
+							margin-right: 0;
+							margin-bottom: 5px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 543px) {
+	.dbOperations {
+		.btn + .btn {
+			margin-top: 0px;
+		}
+	}
+	.mobileView {
+		.currentHeader {
+			font-size: $fsMiddle;
+			padding: 10px;
+		}
+		.item {
+			.daytime {
+				font-size: 16px;
+				padding: 5px;
+			}
+			li {
+				font-size: 16px;
+			}
+			.hour {
+				
+				padding: 5px;
+			}
+			.temperature {
+				&.high {
+					font-size: $fsMiddle;
+				}
+				margin-right: 0;
+				display: block;
+			}
+			.sky {
+				margin-right: 0;
+			}
+		}
+	}
+}

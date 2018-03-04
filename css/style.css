@@ -195,8 +195,10 @@ nav {
 =================================*/
 @media (max-width: 768px) {
   .container, .container-fluid {
-    margin: 0 !important;
+    margin: 0 auto !important;
     padding: 0 !important;
+    width: 100% !important;
+    min-width: 100%;
   }
 }
 .darkWeatherHourly {
@@ -504,7 +506,8 @@ nav {
   color: #bfc1c8;
   padding: 15px 10px;
   margin-top: 0;
-  font-size: 20px;
+  font-size: 25px;
+  border-bottom: 2px solid #e1e1e1;
 }
 .mobileView .item {
   color: #bfc1c8;
@@ -514,7 +517,7 @@ nav {
   background-color: #414762;
 }
 .mobileView .item:nth-last-child(2n-1) {
-  background-color: #323544;
+  background-color: #5562a1;
 }
 .mobileView .item li {
   font-size: 20px;
@@ -528,8 +531,16 @@ nav {
 }
 .mobileView .item .hour {
   width: 35.33%;
-  padding: 10px 5px;
+  padding: 25px 5px 10px;
   text-align: center;
+  position: relative;
+}
+.mobileView .item .time {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  color: orange;
+  font-size: 14px;
 }
 .mobileView .item .sky {
   display: inline-block;
@@ -546,6 +557,54 @@ nav {
   padding: 5px 0;
   margin-right: 10px;
   margin-bottom: 5px;
+}
+.mobileView .item .temperature.high {
+  font-size: 25px;
+}
+
+@media (max-width: 768px) {
+  .darkWeatherHourly .weatherWrapper .content .otherData {
+    padding: 5px 0;
+  }
+  .darkWeatherHourly .weatherWrapper .content .otherData li {
+    font-size: 20px;
+  }
+  .darkWeatherHourly .weatherWrapper .content .otherData li i {
+    display: block;
+    font-size: 30px;
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+}
+@media (max-width: 543px) {
+  .dbOperations .btn + .btn {
+    margin-top: 0px;
+  }
+
+  .mobileView .currentHeader {
+    font-size: 20px;
+    padding: 10px;
+  }
+  .mobileView .item .daytime {
+    font-size: 16px;
+    padding: 5px;
+  }
+  .mobileView .item li {
+    font-size: 16px;
+  }
+  .mobileView .item .hour {
+    padding: 5px;
+  }
+  .mobileView .item .temperature {
+    margin-right: 0;
+    display: block;
+  }
+  .mobileView .item .temperature.high {
+    font-size: 20px;
+  }
+  .mobileView .item .sky {
+    margin-right: 0;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -396,12 +396,17 @@ function updateForecast(weather){
 	if(!weather) {
 		return;
 	}
+	var mobileViewOld = document.querySelector('.mobileView');
+	if(mobileViewOld) {
+		mobileViewOld.parentNode.removeChild(mobileViewOld);
+	}
+	var forecastTableOld = document.querySelector('.forecast');
+	if(forecastTableOld) {
+		forecastTableOld.parentNode.removeChild(forecastTableOld);
+	}
 	
 	if(wSize > 768) {
-		var forecastTableOld = document.querySelector('.forecast');
-		if(forecastTableOld) {
-			forecastTableOld.parentNode.removeChild(forecastTableOld);
-		}
+		
 		var forecastTable = document.createElement('table');
 		forecastTable.classList = 'table forecast';
 		var thead = document.createElement('thead');
@@ -466,12 +471,7 @@ function updateForecast(weather){
 		}
 		
 		weatherWrapper.appendChild(forecastTable);
-
 	} else {
-		var mobileViewOld = document.querySelector('.mobileView');
-		if(mobileViewOld) {
-			mobileViewOld.parentNode.removeChild(mobileViewOld);
-		}
 		let mobileView = document.createElement('div');
 		mobileView.className = 'mobileView';
 
@@ -572,10 +572,12 @@ function updateForecast(weather){
 			day.appendChild(items);
 			mobile.appendChild(day);
 		}
-		let weatherWrapper = document.querySelector('.weatherWrapper');
-		weatherWrapper.appendChild(mobileView);
+		let tableWrapper = document.querySelector('.tableWrapper');
+		tableWrapper.appendChild(mobileView);
+		//weatherWrapper.removeChild(forecastTable);
 		initializeToggles();
 	}
+
 
 	showHideWrapper();
 }

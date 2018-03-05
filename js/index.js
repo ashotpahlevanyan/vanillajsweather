@@ -1,15 +1,14 @@
 (function() {
 
-
 'use strict';
 
 /**
  * Initial Variables and Constants
  */
 
-let API_KEY = "468f937be26c4d91fe63cc0f4b7c0c12";
-let apiUrl = "http://api.openweathermap.org/data/2.5/";
-let units = 'metric'; //metric, imperial, standard
+const API_KEY = "468f937be26c4d91fe63cc0f4b7c0c12";
+const apiUrl = "http://api.openweathermap.org/data/2.5/";
+const units = 'metric'; //metric, imperial, standard
 const OBSOLETE_MINUTES = 3;
 const OBSOLETE = OBSOLETE_MINUTES * 60000;
 const DB_NAME = 'WeatherDatabase';
@@ -33,10 +32,10 @@ let wSize;
 
 let storage = {
 	'forecasts' : [],
-	'currents' : []
+	'currents' : [],
+	'current': {},
+	'forecast': {}
 };
-
-
 
 /**
  * DOM elements
@@ -73,7 +72,7 @@ searchForm.addEventListener('submit', function(e) {
 	e.preventDefault();
 	let searchInput = e.target.elements['search'];
 	let cityId = searchInput.value.trim();
-	let res = checkCityInList(cityId);
+	let res = checkCityInStorage(cityId);
 	if(res.current) {
 		displayCurrent(res.current.weather);
 	} else {
@@ -101,6 +100,8 @@ window.onresize = function(event) {
 	wSize = window.innerWidth 
 		|| document.documentElement.clientWidth 
 		|| document.body.clientWidth;
+	updateForecast(storage.forecast);
+	updateCurrent(storage.current);
 }
 
 function initializeToggles() {
@@ -144,7 +145,7 @@ function loadForecasts() {
 	loadStorage(DB_FORECASTS, storage.forecasts);
 }
 
-function checkCityInList(cityId) {
+function checkCityInStorage(cityId) {
 	let curr;
 	let forc;
 	let res = {};
@@ -224,11 +225,22 @@ function cleanupCurrents() {
  */
 
 function displayCurrent(weather) {
-	updateCurrent(weather);
+	if(!weather) {
+		updateCurrent(storage.current);
+	} else {
+		storage.current = weather;
+		updateCurrent(weather);
+	}
 }
 
 function displayForecast(weather) {
-	updateForecast(weather);
+	if(!weather) {
+		updateForecast(storage.forecast);
+	} else {
+		storage.forecast = weather;
+		updateForecast(weather)
+	}
+	
 }
 
 function prepareForecastToDisplay(weather) {
@@ -237,6 +249,7 @@ function prepareForecastToDisplay(weather) {
 	let uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	storage.forecasts.push(obj);
+	console.log(weather);
 	displayForecast(weather);
 	writeForecastsToDb();
 }
@@ -246,6 +259,7 @@ function prepareCurrentToDisplay(weather) {
 	let uniqueId = generateId(weather.coord.lat, weather.coord.lon);
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	storage.currents.push(obj);
+	console.log(weather);
 	displayCurrent(weather);
 	writeCurrentsToDb();
 }
@@ -405,7 +419,7 @@ function updateForecast(weather){
 		forecastTableOld.parentNode.removeChild(forecastTableOld);
 	}
 	
-	if(wSize > 768) {
+	if(wSize > 992) {
 		
 		var forecastTable = document.createElement('table');
 		forecastTable.classList = 'table forecast';

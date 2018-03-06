@@ -494,6 +494,58 @@ function updateForecast(weather){
 
 		mobileView.appendChild(mobile);
 
+		let index = 0;
+		for(const [key, value] of weather.map.entries()) {
+			let day = document.createElement('li');
+			day.className = 'day';
+
+			let toggle = document.createElement('a');
+			toggle.className = 'toggle';
+
+			let currentHeader = document.createElement('h4');
+			currentHeader.classList = 'currentHeader clearfix';
+
+			let dateKey = new Date(key);
+
+			let weekday = document.createElement('span');
+			weekday.classList = 'day float-left';
+			weekday.textContent = dateNameByValue('day', dateKey.getDay());
+
+			let monthday = document.createElement('span');
+			monthday.classList = 'day float-right';
+			monthday.textContent = dateKey.getDate() + ' ' + dateNameByValue('month', dateKey.getMonth());
+
+			currentHeader.appendChild(weekday);
+			currentHeader.appendChild(monthday);
+			toggle.appendChild(currentHeader);
+			day.appendChild(toggle);
+
+			let items = document.createElement('div');
+			items.className = 'items';
+
+			index ++;
+			for(let j = 0; j < value.length; j++) {
+				if(value.length === 8) {
+					items.appendChild(createItem(value[j]));
+				} else {
+					if(index == 1) {
+						let td = document.createElement('td');
+						td.textContent = '';
+						td.colSpan = 8 - value.length;
+						items.appendChild(td);
+					}
+					items.appendChild(createCell(value[j]));
+				}
+			}
+			if(index === 6){
+				let td = document.createElement('td');
+				td.textContent = '';
+				td.colSpan = 8 - value.length;
+				items.appendChild(td);
+			}
+			tbody.appendChild(tbr);
+		}
+
 		for(let i = 0; i < 5; i++) {
 			let day = document.createElement('li');
 			day.className = 'day';

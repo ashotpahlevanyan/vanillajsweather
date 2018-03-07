@@ -501,6 +501,10 @@ nav {
 .mobileView {
   color: #323544;
 }
+.mobileView .toggle {
+  display: block;
+  cursor: pointer;
+}
 .mobileView .currentHeader {
   background-color: #2c2f3d;
   color: #bfc1c8;
@@ -537,7 +541,7 @@ nav {
 }
 .mobileView .item .time {
   position: absolute;
-  top: 2px;
+  top: 5px;
   right: 5px;
   color: orange;
   font-size: 14px;

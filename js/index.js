@@ -528,126 +528,16 @@ function updateForecast(weather){
 			index ++;
 
 			for(let m = 0; m < daytimes.length; m++) {
-				let filtered = value.filter(item => {item.daytime == daytimes[m]});
-				if(filtered) {
-					let res = createItem(filtered, index);
+				let filtered = value.filter(item => {return item.daytime == daytimes[m]});
+				console.log(filtered);
+				if(filtered.length != 0) {
+					items.appendChild(createItem(filtered, index));
 				}
 			}
+			day.appendChild(items);
+			mobile.appendChild(day);
 		}
-
-			// for(let j = 0; j < value.length; j++) {
-			// 	if(value.length === 8) {
-			// 		items.appendChild(createItem(value[j]));
-			// 	} else {
-			// 		if(index == 1) {
-			// 			let td = document.createElement('td');
-			// 			td.textContent = '';
-			// 			td.colSpan = 8 - value.length;
-			// 			items.appendChild(td);
-			// 		}
-			// 		items.appendChild(createCell(value[j]));
-			// 	}
-			// }
-			// if(index === 6){
-			// 	let td = document.createElement('td');
-			// 	td.textContent = '';
-			// 	td.colSpan = 8 - value.length;
-			// 	items.appendChild(td);
-			// }
-			// tbody.appendChild(tbr);
-
-		// for(let i = 0; i < 5; i++) {
-		// 	let day = document.createElement('li');
-		// 	day.className = 'day';
-
-		// 	let toggle = document.createElement('a');
-		// 	toggle.className = 'toggle';
-
-		// 	let currentHeader = document.createElement('h4');
-		// 	currentHeader.classList = 'currentHeader clearfix';
-
-		// 	let weekday = document.createElement('span');
-		// 	weekday.classList = 'day float-left';
-		// 	weekday.textContent = 'Friday';
-
-		// 	let monthday = document.createElement('span');
-		// 	monthday.classList = 'day float-right';
-		// 	monthday.textContent = '2 Mar';
-
-		// 	currentHeader.appendChild(weekday);
-		// 	currentHeader.appendChild(monthday);
-		// 	toggle.appendChild(currentHeader);
-		// 	day.appendChild(toggle);
-
-
-		// 	let items = document.createElement('div');
-		// 	items.className = 'items';
-
-		// 	for(let j = 0; j < 4; j++) {
-		// 		let item = document.createElement('ul');
-		// 		item.className = 'item';
-
-		// 		let daytime = document.createElement('li');
-		// 		daytime.className = 'daytime';
-		// 		daytime.textContent = 'Night';
-
-		// 		item.appendChild(daytime);
-
-		// 		for(let k = 0; k < 2; k++) {
-
-		// 			let hour = document.createElement('li');
-		// 			hour.className = 'hour';
-
-		// 			let time = document.createElement('span');
-		// 			time.className = 'time';
-
-		// 			hour.appendChild(time);
-
-		// 			let sky = document.createElement('div');
-		// 			sky.className = 'sky';
-
-		// 			let icon = document.createElement('i');
-		// 			icon.classList = 'wi wi-cloud';
-
-		// 			sky.appendChild(icon);
-		// 			hour.appendChild(sky);
-
-		// 			let tempH = document.createElement('div');
-		// 			tempH.classList = 'temperature high';
-		// 			let valueH = document.createElement('span');
-		// 			valueH.className = 'value';
-		// 			valueH.textContent = '7.18';
-
-		// 			let unitH = document.createElement('span');
-		// 			unitH.className = 'unit';
-
-		// 			tempH.appendChild(valueH);
-		// 			tempH.appendChild(unitH);
-
-
-		// 			let tempL = document.createElement('div');
-		// 			tempL.classList = 'temperature low';
-		// 			let valueL = document.createElement('span');
-		// 			valueL.className = 'value';
-		// 			valueL.textContent = '3.18';
-
-		// 			let unitL = document.createElement('span');
-		// 			unitL.className = 'unit';
-					
-		// 			tempL.appendChild(valueL);
-		// 			tempL.appendChild(unitL);
-
-		// 			hour.appendChild(tempH);
-		// 			hour.appendChild(tempL);
-		// 			item.appendChild(hour);
-		// 		}
-
-		// 	items.appendChild(item);
-		// 	}
-
-		// 	day.appendChild(items);
-		// 	mobile.appendChild(day);
-		// }
+		
 		let tableWrapper = document.querySelector('.tableWrapper');
 		tableWrapper.appendChild(mobileView);
 		//weatherWrapper.removeChild(forecastTable);
@@ -657,13 +547,126 @@ function updateForecast(weather){
 	showHideWrapper();
 }
 
+// function hide() {
+
+// 	for(let j = 0; j < value.length; j++) {
+// 		if(value.length === 8) {
+// 			items.appendChild(createItem(value[j]));
+// 		} else {
+// 			if(index == 1) {
+// 				let td = document.createElement('td');
+// 				td.textContent = '';
+// 				td.colSpan = 8 - value.length;
+// 				items.appendChild(td);
+// 			}
+// 			items.appendChild(createCell(value[j]));
+// 		}
+// 	}
+// 	if(index === 6){
+// 		let td = document.createElement('td');
+// 		td.textContent = '';
+// 		td.colSpan = 8 - value.length;
+// 		items.appendChild(td);
+// 	}
+// 	tbody.appendChild(tbr);
+
+// 	for(let i = 0; i < 5; i++) {
+// 		let day = document.createElement('li');
+// 		day.className = 'day';
+
+// 		let toggle = document.createElement('a');
+// 		toggle.className = 'toggle';
+
+// 		let currentHeader = document.createElement('h4');
+// 		currentHeader.classList = 'currentHeader clearfix';
+
+// 		let weekday = document.createElement('span');
+// 		weekday.classList = 'day float-left';
+// 		weekday.textContent = 'Friday';
+
+// 		let monthday = document.createElement('span');
+// 		monthday.classList = 'day float-right';
+// 		monthday.textContent = '2 Mar';
+
+// 		currentHeader.appendChild(weekday);
+// 		currentHeader.appendChild(monthday);
+// 		toggle.appendChild(currentHeader);
+// 		day.appendChild(toggle);
+
+
+// 		let items = document.createElement('div');
+// 		items.className = 'items';
+
+// 		for(let j = 0; j < 4; j++) {
+// 			let item = document.createElement('ul');
+// 			item.className = 'item';
+
+// 			let daytime = document.createElement('li');
+// 			daytime.className = 'daytime';
+// 			daytime.textContent = 'Night';
+
+// 			item.appendChild(daytime);
+
+// 			for(let k = 0; k < 2; k++) {
+
+// 				let hour = document.createElement('li');
+// 				hour.className = 'hour';
+
+// 				let time = document.createElement('span');
+// 				time.className = 'time';
+
+// 				hour.appendChild(time);
+
+// 				let sky = document.createElement('div');
+// 				sky.className = 'sky';
+
+// 				let icon = document.createElement('i');
+// 				icon.classList = 'wi wi-cloud';
+
+// 				sky.appendChild(icon);
+// 				hour.appendChild(sky);
+
+// 				let tempH = document.createElement('div');
+// 				tempH.classList = 'temperature high';
+// 				let valueH = document.createElement('span');
+// 				valueH.className = 'value';
+// 				valueH.textContent = '7.18';
+
+// 				let unitH = document.createElement('span');
+// 				unitH.className = 'unit';
+
+// 				tempH.appendChild(valueH);
+// 				tempH.appendChild(unitH);
+
+
+// 				let tempL = document.createElement('div');
+// 				tempL.classList = 'temperature low';
+// 				let valueL = document.createElement('span');
+// 				valueL.className = 'value';
+// 				valueL.textContent = '3.18';
+
+// 				let unitL = document.createElement('span');
+// 				unitL.className = 'unit';
+				
+// 				tempL.appendChild(valueL);
+// 				tempL.appendChild(unitL);
+
+// 				hour.appendChild(tempH);
+// 				hour.appendChild(tempL);
+// 				item.appendChild(hour);
+// 			}
+// }
+
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
 function createItem(filtered, index) {
 	let item = document.createElement('ul');
 	item.className = 'item';
 
 	let daytime = document.createElement('li');
 	daytime.className = 'daytime';
-	daytime.textContent = filtered[0].daytime.toUpperCase();
+	daytime.textContent = capitalizeFirstLetter(filtered[0].daytime);
 
 	item.appendChild(daytime);
 
@@ -680,6 +683,7 @@ function createItem(filtered, index) {
 
 		let time = document.createElement('span');
 		time.className = 'time';
+		time.textContent = filtered[k].time;
 
 		hour.appendChild(time);
 
@@ -742,56 +746,6 @@ function createItem(filtered, index) {
 		hour.textContent = '';
 		item.appendChild(hour);
 	}
-
-	// for(let k = 0; k < 2; k++) {
-
-	// 	let hour = document.createElement('li');
-	// 	hour.className = 'hour';
-
-	// 	let time = document.createElement('span');
-	// 	time.className = 'time';
-
-	// 	hour.appendChild(time);
-
-	// 	let sky = document.createElement('div');
-	// 	sky.className = 'sky';
-
-	// 	let icon = document.createElement('i');
-	// 	icon.classList = 'wi wi-cloud';
-
-	// 	sky.appendChild(icon);
-	// 	hour.appendChild(sky);
-
-	// 	let tempH = document.createElement('div');
-	// 	tempH.classList = 'temperature high';
-	// 	let valueH = document.createElement('span');
-	// 	valueH.className = 'value';
-	// 	valueH.textContent = '7.18';
-
-	// 	let unitH = document.createElement('span');
-	// 	unitH.className = 'unit';
-
-	// 	tempH.appendChild(valueH);
-	// 	tempH.appendChild(unitH);
-
-
-	// 	let tempL = document.createElement('div');
-	// 	tempL.classList = 'temperature low';
-	// 	let valueL = document.createElement('span');
-	// 	valueL.className = 'value';
-	// 	valueL.textContent = '3.18';
-
-	// 	let unitL = document.createElement('span');
-	// 	unitL.className = 'unit';
-		
-	// 	tempL.appendChild(valueL);
-	// 	tempL.appendChild(unitL);
-
-	// 	hour.appendChild(tempH);
-	// 	hour.appendChild(tempL);
-	// 	item.appendChild(hour);
-	// }
-	
 
 	return item;
 }

@@ -324,6 +324,10 @@ $fsGiant: 60px;
 
 .mobileView {
 	color: $colorBlue;
+	.toggle {
+		display: block;
+		cursor: pointer;
+	}
 	.currentHeader {
 		background-color: $colorHeader;
 		color: $colorFontGrey;
@@ -362,7 +366,7 @@ $fsGiant: 60px;
 		}
 		.time{
 			position: absolute;
-			top: 2px;
+			top: 5px;
 			right: 5px;
 			color: orange;
 			font-size: $fsBase;

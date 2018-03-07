@@ -271,6 +271,7 @@ function enhanceWeather(weather) {
 		let res = getDateTime(weather.list[i].dt_txt);
 		weather.list[i].date = res.date;
 		weather.list[i].time = res.time;
+		weather.list[i].daytime = res.daytime;
 		dateSet.add(res.date);
 		map.set(res.date, []);
 	}
@@ -523,129 +524,276 @@ function updateForecast(weather){
 			let items = document.createElement('div');
 			items.className = 'items';
 
+			let daytimes = ['night', 'morning', 'day', 'evening'];
 			index ++;
-			for(let j = 0; j < value.length; j++) {
-				if(value.length === 8) {
-					items.appendChild(createItem(value[j]));
-				} else {
-					if(index == 1) {
-						let td = document.createElement('td');
-						td.textContent = '';
-						td.colSpan = 8 - value.length;
-						items.appendChild(td);
-					}
-					items.appendChild(createCell(value[j]));
+
+			for(let m = 0; m < daytimes.length; m++) {
+				let filtered = value.filter(item => {item.daytime == daytimes[m]});
+				if(filtered) {
+					let res = createItem(filtered, index);
 				}
 			}
-			if(index === 6){
-				let td = document.createElement('td');
-				td.textContent = '';
-				td.colSpan = 8 - value.length;
-				items.appendChild(td);
-			}
-			tbody.appendChild(tbr);
 		}
 
-		for(let i = 0; i < 5; i++) {
-			let day = document.createElement('li');
-			day.className = 'day';
+			// for(let j = 0; j < value.length; j++) {
+			// 	if(value.length === 8) {
+			// 		items.appendChild(createItem(value[j]));
+			// 	} else {
+			// 		if(index == 1) {
+			// 			let td = document.createElement('td');
+			// 			td.textContent = '';
+			// 			td.colSpan = 8 - value.length;
+			// 			items.appendChild(td);
+			// 		}
+			// 		items.appendChild(createCell(value[j]));
+			// 	}
+			// }
+			// if(index === 6){
+			// 	let td = document.createElement('td');
+			// 	td.textContent = '';
+			// 	td.colSpan = 8 - value.length;
+			// 	items.appendChild(td);
+			// }
+			// tbody.appendChild(tbr);
 
-			let toggle = document.createElement('a');
-			toggle.className = 'toggle';
+		// for(let i = 0; i < 5; i++) {
+		// 	let day = document.createElement('li');
+		// 	day.className = 'day';
 
-			let currentHeader = document.createElement('h4');
-			currentHeader.classList = 'currentHeader clearfix';
+		// 	let toggle = document.createElement('a');
+		// 	toggle.className = 'toggle';
 
-			let weekday = document.createElement('span');
-			weekday.classList = 'day float-left';
-			weekday.textContent = 'Friday';
+		// 	let currentHeader = document.createElement('h4');
+		// 	currentHeader.classList = 'currentHeader clearfix';
 
-			let monthday = document.createElement('span');
-			monthday.classList = 'day float-right';
-			monthday.textContent = '2 Mar';
+		// 	let weekday = document.createElement('span');
+		// 	weekday.classList = 'day float-left';
+		// 	weekday.textContent = 'Friday';
 
-			currentHeader.appendChild(weekday);
-			currentHeader.appendChild(monthday);
-			toggle.appendChild(currentHeader);
-			day.appendChild(toggle);
+		// 	let monthday = document.createElement('span');
+		// 	monthday.classList = 'day float-right';
+		// 	monthday.textContent = '2 Mar';
 
-
-			let items = document.createElement('div');
-			items.className = 'items';
-
-			for(let j = 0; j < 4; j++) {
-				let item = document.createElement('ul');
-				item.className = 'item';
-
-				let daytime = document.createElement('li');
-				daytime.className = 'daytime';
-				daytime.textContent = 'Night';
-
-				item.appendChild(daytime);
-
-				for(let k = 0; k < 2; k++) {
-
-					let hour = document.createElement('li');
-					hour.className = 'hour';
-
-					let time = document.createElement('span');
-					time.className = 'time';
-
-					hour.appendChild(time);
-
-					let sky = document.createElement('div');
-					sky.className = 'sky';
-
-					let icon = document.createElement('i');
-					icon.classList = 'wi wi-cloud';
-
-					sky.appendChild(icon);
-					hour.appendChild(sky);
-
-					let tempH = document.createElement('div');
-					tempH.classList = 'temperature high';
-					let valueH = document.createElement('span');
-					valueH.className = 'value';
-					valueH.textContent = '7.18';
-
-					let unitH = document.createElement('span');
-					unitH.className = 'unit';
-
-					tempH.appendChild(valueH);
-					tempH.appendChild(unitH);
+		// 	currentHeader.appendChild(weekday);
+		// 	currentHeader.appendChild(monthday);
+		// 	toggle.appendChild(currentHeader);
+		// 	day.appendChild(toggle);
 
 
-					let tempL = document.createElement('div');
-					tempL.classList = 'temperature low';
-					let valueL = document.createElement('span');
-					valueL.className = 'value';
-					valueL.textContent = '3.18';
+		// 	let items = document.createElement('div');
+		// 	items.className = 'items';
 
-					let unitL = document.createElement('span');
-					unitL.className = 'unit';
+		// 	for(let j = 0; j < 4; j++) {
+		// 		let item = document.createElement('ul');
+		// 		item.className = 'item';
+
+		// 		let daytime = document.createElement('li');
+		// 		daytime.className = 'daytime';
+		// 		daytime.textContent = 'Night';
+
+		// 		item.appendChild(daytime);
+
+		// 		for(let k = 0; k < 2; k++) {
+
+		// 			let hour = document.createElement('li');
+		// 			hour.className = 'hour';
+
+		// 			let time = document.createElement('span');
+		// 			time.className = 'time';
+
+		// 			hour.appendChild(time);
+
+		// 			let sky = document.createElement('div');
+		// 			sky.className = 'sky';
+
+		// 			let icon = document.createElement('i');
+		// 			icon.classList = 'wi wi-cloud';
+
+		// 			sky.appendChild(icon);
+		// 			hour.appendChild(sky);
+
+		// 			let tempH = document.createElement('div');
+		// 			tempH.classList = 'temperature high';
+		// 			let valueH = document.createElement('span');
+		// 			valueH.className = 'value';
+		// 			valueH.textContent = '7.18';
+
+		// 			let unitH = document.createElement('span');
+		// 			unitH.className = 'unit';
+
+		// 			tempH.appendChild(valueH);
+		// 			tempH.appendChild(unitH);
+
+
+		// 			let tempL = document.createElement('div');
+		// 			tempL.classList = 'temperature low';
+		// 			let valueL = document.createElement('span');
+		// 			valueL.className = 'value';
+		// 			valueL.textContent = '3.18';
+
+		// 			let unitL = document.createElement('span');
+		// 			unitL.className = 'unit';
 					
-					tempL.appendChild(valueL);
-					tempL.appendChild(unitL);
+		// 			tempL.appendChild(valueL);
+		// 			tempL.appendChild(unitL);
 
-					hour.appendChild(tempH);
-					hour.appendChild(tempL);
-					item.appendChild(hour);
-				}
+		// 			hour.appendChild(tempH);
+		// 			hour.appendChild(tempL);
+		// 			item.appendChild(hour);
+		// 		}
 
-			items.appendChild(item);
-			}
+		// 	items.appendChild(item);
+		// 	}
 
-			day.appendChild(items);
-			mobile.appendChild(day);
-		}
+		// 	day.appendChild(items);
+		// 	mobile.appendChild(day);
+		// }
 		let tableWrapper = document.querySelector('.tableWrapper');
 		tableWrapper.appendChild(mobileView);
 		//weatherWrapper.removeChild(forecastTable);
 		initializeToggles();
 	}
 
-
 	showHideWrapper();
+}
+
+function createItem(filtered, index) {
+	let item = document.createElement('ul');
+	item.className = 'item';
+
+	let daytime = document.createElement('li');
+	daytime.className = 'daytime';
+	daytime.textContent = filtered[0].daytime.toUpperCase();
+
+	item.appendChild(daytime);
+
+	if(filtered.length == 1 && index == 1) {
+		let hour = document.createElement('li');
+		hour.className = 'hour';
+		hour.textContent = '';
+		item.appendChild(hour);
+	}
+
+	for(let k = 0; k < filtered.length; k++) {
+		let hour = document.createElement('li');
+		hour.className = 'hour';
+
+		let time = document.createElement('span');
+		time.className = 'time';
+
+		hour.appendChild(time);
+
+		let sky = document.createElement('div');
+		sky.className = 'sky';
+
+		let icon = document.createElement('i');
+		icon.classList = calculateSkyClass(filtered[k].weather[0].icon);
+
+		sky.appendChild(icon);
+		hour.appendChild(sky);
+
+		let tempH = document.createElement('div');
+		tempH.classList = 'temperature high';
+		let valueH = document.createElement('span');
+		valueH.className = 'value';
+		valueH.textContent = filtered[k].main.temp;
+		
+		let unitH = document.createElement('span');
+		unitH.className = 'unit';
+		if(units == 'metric') {
+			unitH.textContent = 'C';
+			var celcius = document.createElement('sup');
+			celcius.textContent = 'o';
+			unitH.insertBefore(celcius, unitH.firstChild);
+		} else {
+			unitH.textContent = 'F';
+		}
+		tempH.appendChild(valueH);
+		tempH.appendChild(unitH);
+
+
+		let tempL = document.createElement('div');
+		tempL.classList = 'temperature low';
+		let valueL = document.createElement('span');
+		valueL.className = 'value';
+		valueL.textContent = filtered[k].main.temp_min;
+
+		let unitL = document.createElement('span');
+		unitL.className = 'unit';
+		if(units == 'metric') {
+			unitL.textContent = 'C';
+			var celcius = document.createElement('sup');
+			celcius.textContent = 'o';
+			unitL.insertBefore(celcius, unitL.firstChild);
+		} else {
+			unitL.textContent = 'F';
+		}
+		tempL.appendChild(valueL);
+		tempL.appendChild(unitL);
+
+		hour.appendChild(tempH);
+		hour.appendChild(tempL);
+		item.appendChild(hour);
+	}
+
+	if(filtered.length == 1 && index == 6) {
+		let hour = document.createElement('li');
+		hour.className = 'hour';
+		hour.textContent = '';
+		item.appendChild(hour);
+	}
+
+	// for(let k = 0; k < 2; k++) {
+
+	// 	let hour = document.createElement('li');
+	// 	hour.className = 'hour';
+
+	// 	let time = document.createElement('span');
+	// 	time.className = 'time';
+
+	// 	hour.appendChild(time);
+
+	// 	let sky = document.createElement('div');
+	// 	sky.className = 'sky';
+
+	// 	let icon = document.createElement('i');
+	// 	icon.classList = 'wi wi-cloud';
+
+	// 	sky.appendChild(icon);
+	// 	hour.appendChild(sky);
+
+	// 	let tempH = document.createElement('div');
+	// 	tempH.classList = 'temperature high';
+	// 	let valueH = document.createElement('span');
+	// 	valueH.className = 'value';
+	// 	valueH.textContent = '7.18';
+
+	// 	let unitH = document.createElement('span');
+	// 	unitH.className = 'unit';
+
+	// 	tempH.appendChild(valueH);
+	// 	tempH.appendChild(unitH);
+
+
+	// 	let tempL = document.createElement('div');
+	// 	tempL.classList = 'temperature low';
+	// 	let valueL = document.createElement('span');
+	// 	valueL.className = 'value';
+	// 	valueL.textContent = '3.18';
+
+	// 	let unitL = document.createElement('span');
+	// 	unitL.className = 'unit';
+		
+	// 	tempL.appendChild(valueL);
+	// 	tempL.appendChild(unitL);
+
+	// 	hour.appendChild(tempH);
+	// 	hour.appendChild(tempL);
+	// 	item.appendChild(hour);
+	// }
+	
+
+	return item;
 }
 
 function createCell(item) {
@@ -918,8 +1066,35 @@ function getDateTime(dateString) {
 	let dateArr = dateString.split(' ');
 	return {
 		date: dateArr[0],
-		time: dateArr[1].substr(0,5)
+		time: dateArr[1].substr(0,5),
+		daytime: dayTimeNameByValue(dateArr[1].substr(0,5))
 	};
+}
+
+function dayTimeNameByValue(time) {
+	var res = '';
+	switch(time) {
+		case '00:00':
+		case '03:00':
+			res = 'night';
+		break;
+		case '06:00':
+		case '09:00':
+			res = 'morning';
+		break;
+		case '12:00':
+		case '15:00':
+			res = 'day';
+		break;
+		case '18:00':
+		case '21:00':
+			res = 'evening';
+		break;
+		default:
+			res = 'night';
+		break;
+	}
+	return res;
 }
 
 function dateNameByValue(type, value) {

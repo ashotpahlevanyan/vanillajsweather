@@ -352,6 +352,14 @@ body {
 	color: $colorBlue;
 	
 	&.horizontal {
+		.day:first-child {
+			.items {
+				display: block;
+			}
+		}
+		.items {
+			display: none;
+		}
 		.item {
 			text-align: center;
 			padding: 5px 10px;

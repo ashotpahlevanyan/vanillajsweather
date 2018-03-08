@@ -518,6 +518,12 @@ body {
 .mobileView {
   color: #323544;
 }
+.mobileView.horizontal .day:first-child .items {
+  display: block;
+}
+.mobileView.horizontal .items {
+  display: none;
+}
 .mobileView.horizontal .item {
   text-align: center;
   padding: 5px 10px;

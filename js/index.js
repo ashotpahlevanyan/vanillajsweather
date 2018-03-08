@@ -110,7 +110,13 @@ function initializeToggles() {
 	let togglesList = document.querySelectorAll('.toggle');
 	togglesList.forEach(function(item) {item.addEventListener('click', function(event) {
 		event.preventDefault();
+		let allItems = document.querySelectorAll('.items');
 		let items = this.parentNode.querySelector('.items');
+		for(let k = 0; k < allItems.length; k++) {
+			if(items != allItems[k]) {
+				allItems[k].style.display = 'none';
+			}
+		}
 		if(items.style.display == 'none') {
 			items.style.display = 'block';
 		} else {

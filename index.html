@@ -11,15 +11,17 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+	<div class="bgImage">
+	</div>
 	<div class="container darkWeatherHourly clearfix">
-		<div class="dbOperations">
+		<!-- <div class="dbOperations">
 			<button class="btn btn-info cleanupIDB">Cleanup IndexedDB</button>
 			<button class="btn btn-danger deleteIDB">Delete IndexedDB</button>
-		</div>
+		</div> -->
 		
 		<form class="form" onSubmit="">
 				<div class="field">
-					<input type="text" name="search" class="form-control search" placeholder="Search your City" value="" onChange="" />
+					<input type="text" name="search" class="search" placeholder="Search your City" value="" onChange="" />
 				</div>
 				<button type="submit" class="buttonPrimary">Find</button>
 		</form>
@@ -32,6 +34,7 @@
 			<div class="tableWrapper"></div>
 		</div>
 	</div>
+
 <!-- <div class="mobileView">
 				<ul class="mobile">
 					<li class="day">

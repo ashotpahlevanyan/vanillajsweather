@@ -41,11 +41,13 @@ let storage = {
  * DOM elements
  */
 
+let bgImage = document.querySelector('.bgImage');
 let weatherWrapper = document.querySelector('.weatherWrapper');
 let searchForm = document.querySelector('.form');
 let result = document.querySelector('.result');
-let deleteIDBBtn = document.querySelector('.deleteIDB');
-let cleanupIDBBtn = document.querySelector('.cleanupIDB');
+//let location = document.querySelector('.location');
+// let deleteIDBBtn = document.querySelector('.deleteIDB');
+// let cleanupIDBBtn = document.querySelector('.cleanupIDB');
 
 /**
  * DOM Element Event handlers
@@ -86,15 +88,15 @@ searchForm.addEventListener('submit', function(e) {
 	}
 });
 
-deleteIDBBtn.addEventListener('click', function(e) {
-	clearObjectStore(DB_FORECASTS);
-	clearObjectStore(DB_CURRENTS);
-});
+// deleteIDBBtn.addEventListener('click', function(e) {
+// 	clearObjectStore(DB_FORECASTS);
+// 	clearObjectStore(DB_CURRENTS);
+// });
 
-cleanupIDBBtn.addEventListener('click', function(e) {
-	cleanupObjectStore(DB_FORECASTS);
-	cleanupObjectStore(DB_CURRENTS);
-});
+// cleanupIDBBtn.addEventListener('click', function(e) {
+// 	cleanupObjectStore(DB_FORECASTS);
+// 	cleanupObjectStore(DB_CURRENTS);
+// });
 
 window.onresize = function(event) {
 	wSize = window.innerWidth 
@@ -325,6 +327,7 @@ function updateCurrent(weather){
 	location.className = 'location';
 	location.textContent = weather.name;
 
+
 	var weatherData = document.createElement('div');
 	weatherData.className = 'weatherData';
 
@@ -397,7 +400,8 @@ function updateCurrent(weather){
 	current.appendChild(content);
 
 	content.style.backgroundImage = "url('" + calculateImageUrl(weather.weather[0].icon) + "')";
-
+	bgImage.style.backgroundImage = "url('" + calculateImageUrl(weather.weather[0].icon) + "')";
+	location.style.color = calculateColorByWeather(weather.weather[0].icon);
 	if(weatherWrapper.firstChild) {
 		weatherWrapper.insertBefore(current, weatherWrapper.firstChild);
 	} else {
@@ -486,7 +490,7 @@ function updateForecast(weather){
 		}
 		
 		weatherWrapper.appendChild(forecastTable);
-	} else {
+	} else if(wSize <= 992 && wSize > 640){
 		let mobileView = document.createElement('div');
 		mobileView.className = 'mobileView';
 
@@ -538,6 +542,63 @@ function updateForecast(weather){
 			mobile.appendChild(day);
 		}
 		
+		let tableWrapper = document.querySelector('.tableWrapper');
+		tableWrapper.appendChild(mobileView);
+		//weatherWrapper.removeChild(forecastTable);
+		initializeToggles();
+	} else {
+		let mobileView = document.createElement('div');
+		mobileView.className = 'mobileView horizontal';
+
+		let mobile = document.createElement('ul');
+		mobile.className = 'mobile';
+
+		mobileView.appendChild(mobile);
+
+		let index = 0;
+		for(const [key, value] of weather.map.entries()) {
+			let day = document.createElement('li');
+			day.className = 'day';
+
+			let toggle = document.createElement('a');
+			toggle.className = 'toggle';
+
+			let currentHeader = document.createElement('h4');
+			currentHeader.classList = 'currentHeader clearfix';
+
+			let dateKey = new Date(key);
+
+			let weekday = document.createElement('span');
+			weekday.classList = 'day float-left';
+			weekday.textContent = dateNameByValue('day', dateKey.getDay());
+
+			let monthday = document.createElement('span');
+			monthday.classList = 'day float-right';
+			monthday.textContent = dateKey.getDate() + ' ' + dateNameByValue('month', dateKey.getMonth());
+
+			currentHeader.appendChild(weekday);
+			currentHeader.appendChild(monthday);
+			toggle.appendChild(currentHeader);
+			day.appendChild(toggle);
+
+			let items = document.createElement('div');
+			items.className = 'items';
+
+			let daytimes = ['night', 'morning', 'day', 'evening'];
+			index ++;
+
+			for(let m = 0; m < daytimes.length; m++) {
+				let filtered = value.filter(item => {return item.daytime == daytimes[m]});
+				console.log(filtered);
+				if(filtered.length != 0) {
+					for(let t = 0; t < filtered.length; t++) {
+						items.appendChild(createItemMobile(filtered[t]));
+					}
+				}
+			}
+			day.appendChild(items);
+			mobile.appendChild(day);
+		}
 		let tableWrapper = document.querySelector('.tableWrapper');
 		tableWrapper.appendChild(mobileView);
 		//weatherWrapper.removeChild(forecastTable);
@@ -660,6 +721,81 @@ function updateForecast(weather){
 function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+function createItemMobile(filteredItem) {
+	// let item = document.createElement('div');
+	// item.className = 'item';
+
+	// let daytime = document.createElement('li');
+	// daytime.className = 'daytime';
+	// daytime.textContent = capitalizeFirstLetter(filteredItem.daytime);
+
+	// item.appendChild(daytime);
+
+	let item = document.createElement('div');
+	item.classList = 'item clearfix';
+
+	let time = document.createElement('span');
+	time.className = 'time';
+	time.textContent = filteredItem.time;
+
+	item.appendChild(time);
+
+	let sky = document.createElement('div');
+	sky.className = 'sky';
+
+	let icon = document.createElement('i');
+	icon.classList = calculateSkyClass(filteredItem.weather[0].icon);
+
+	sky.appendChild(icon);
+	item.appendChild(sky);
+
+	let tempH = document.createElement('div');
+	tempH.classList = 'temperature high';
+	let valueH = document.createElement('span');
+	valueH.className = 'value';
+	valueH.textContent = filteredItem.main.temp;
+	
+	let unitH = document.createElement('span');
+	unitH.className = 'unit';
+	if(units == 'metric') {
+		unitH.textContent = 'C';
+		var celcius = document.createElement('sup');
+		celcius.textContent = 'o';
+		unitH.insertBefore(celcius, unitH.firstChild);
+	} else {
+		unitH.textContent = 'F';
+	}
+	tempH.appendChild(valueH);
+	tempH.appendChild(unitH);
+
+
+	// let tempL = document.createElement('div');
+	// tempL.classList = 'temperature low';
+	// let valueL = document.createElement('span');
+	// valueL.className = 'value';
+	// valueL.textContent = filteredItem.main.temp_min;
+
+	// let unitL = document.createElement('span');
+	// unitL.className = 'unit';
+	// if(units == 'metric') {
+	// 	unitL.textContent = 'C';
+	// 	var celcius = document.createElement('sup');
+	// 	celcius.textContent = 'o';
+	// 	unitL.insertBefore(celcius, unitL.firstChild);
+	// } else {
+	// 	unitL.textContent = 'F';
+	// }
+	// tempL.appendChild(valueL);
+	// tempL.appendChild(unitL);
+
+	item.appendChild(tempH);
+	//item.appendChild(tempL);
+	// item.appendChild(hour);
+	
+	return item;
+}
+
 function createItem(filtered, index) {
 	let item = document.createElement('ul');
 	item.className = 'item';
@@ -716,27 +852,27 @@ function createItem(filtered, index) {
 		tempH.appendChild(unitH);
 
 
-		let tempL = document.createElement('div');
-		tempL.classList = 'temperature low';
-		let valueL = document.createElement('span');
-		valueL.className = 'value';
-		valueL.textContent = filtered[k].main.temp_min;
+		// let tempL = document.createElement('div');
+		// tempL.classList = 'temperature low';
+		// let valueL = document.createElement('span');
+		// valueL.className = 'value';
+		// valueL.textContent = filtered[k].main.temp_min;
 
-		let unitL = document.createElement('span');
-		unitL.className = 'unit';
-		if(units == 'metric') {
-			unitL.textContent = 'C';
-			var celcius = document.createElement('sup');
-			celcius.textContent = 'o';
-			unitL.insertBefore(celcius, unitL.firstChild);
-		} else {
-			unitL.textContent = 'F';
-		}
-		tempL.appendChild(valueL);
-		tempL.appendChild(unitL);
+		// let unitL = document.createElement('span');
+		// unitL.className = 'unit';
+		// if(units == 'metric') {
+		// 	unitL.textContent = 'C';
+		// 	var celcius = document.createElement('sup');
+		// 	celcius.textContent = 'o';
+		// 	unitL.insertBefore(celcius, unitL.firstChild);
+		// } else {
+		// 	unitL.textContent = 'F';
+		// }
+		// tempL.appendChild(valueL);
+		// tempL.appendChild(unitL);
 
 		hour.appendChild(tempH);
-		hour.appendChild(tempL);
+		//hour.appendChild(tempL);
 		item.appendChild(hour);
 	}
 
@@ -764,7 +900,7 @@ function createCell(item) {
 		temperature.classList = 'temperature high';
 		var tempValue = document.createElement('span');
 		tempValue.className = 'value';
-		tempValue.textContent = item.main.temp_max;
+		tempValue.textContent = item.main.temp;
 		temperature.appendChild(tempValue);
 		var unit = document.createElement('span');
 		unit.className = 'unit';
@@ -780,26 +916,26 @@ function createCell(item) {
 		td.appendChild(temperature);
 	})();
 
-	(function (){
-		var temperature = document.createElement('div');
-		temperature.classList = 'temperature low';
-		var tempValue = document.createElement('span');
-		tempValue.className = 'value';
-		tempValue.textContent = item.main.temp_min;
-		temperature.appendChild(tempValue);
-		var unit = document.createElement('span');
-		unit.className = 'unit';
-		if(units == 'metric') {
-			unit.textContent = 'C';
-			var celcius = document.createElement('sup');
-			celcius.textContent = 'o';
-			unit.insertBefore(celcius, unit.firstChild);
-		} else {
-			unit.textContent = 'F';
-		}
-		temperature.appendChild(unit);
-		td.appendChild(temperature);
-	})();
+	// (function (){
+	// 	var temperature = document.createElement('div');
+	// 	temperature.classList = 'temperature low';
+	// 	var tempValue = document.createElement('span');
+	// 	tempValue.className = 'value';
+	// 	tempValue.textContent = item.main.temp_min;
+	// 	temperature.appendChild(tempValue);
+	// 	var unit = document.createElement('span');
+	// 	unit.className = 'unit';
+	// 	if(units == 'metric') {
+	// 		unit.textContent = 'C';
+	// 		var celcius = document.createElement('sup');
+	// 		celcius.textContent = 'o';
+	// 		unit.insertBefore(celcius, unit.firstChild);
+	// 	} else {
+	// 		unit.textContent = 'F';
+	// 	}
+	// 	temperature.appendChild(unit);
+	// 	td.appendChild(temperature);
+	// })();
 
 	return td;
 }
@@ -1283,6 +1419,65 @@ function calculateImageUrl(icon) {
 			calculatedImageUrl += "day-sunny.jpg";
 	}
 	return calculatedImageUrl;
+}
+
+function calculateColorByWeather(icon) {
+	let color = '#fff';
+	switch(icon) {
+		case '01d':
+			color = '#f06d06';
+			break;
+		case '01n':
+			color = '#f06d06';
+			break;
+		case '02d':
+			color = '#f06d06';
+			break;
+		case '02n':
+			color = '#f06d06';
+			break;
+		case '03d':
+		case '03n':
+			color = '#ea2679';
+			break;
+		case '04d':
+		case '04n':
+			color = '#f06d06';
+			break;
+		case '09d':
+			color = '#26b2e9';
+			break;
+		case '09n':
+			color = '#26b2e9';
+			break;
+		case '10d':
+			color = '#800280';
+			break;
+		case '10n':
+			color = '#800280';
+			break;
+		case '11d':
+			color = '#800280';
+			break;
+		case '11n':
+			color = '#800280';
+			break;
+		case '13d':
+			color = '#027d02';
+			break;
+		case '13n':
+			color = '#027d02';
+			break;
+		case '50d':
+			color = '#e94326';
+			break;
+		case '50n':
+			color = '#e94326';
+			break;
+		default:
+			color = '#e94326';
+	}
+	return color;
 }
 
 /**

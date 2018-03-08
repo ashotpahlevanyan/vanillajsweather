@@ -73,8 +73,28 @@ $fsGiant: 60px;
 
 }
 
+body {
+	position: relative;
+}
+.bgImage {
+	background-image: url(/images/day-sunny.jpg);
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	z-index: -1;
+	background-size: cover;
+	-webkit-filter: blur(5px);
+	-moz-filter: blur(5px);
+	-o-filter: blur(5px);
+	-ms-filter: blur(5px);
+	filter: blur(5px);
+}
 
 .darkWeatherHourly {
+	position: relative;
+	z-index: 5;
 	font-family: $ffRoboto;
 	color: $colorWhite;
 	font-size: $fsBase;
@@ -97,7 +117,7 @@ $fsGiant: 60px;
 		padding: 10px 0;
 		.search {
 			//@include border-radius(30px);
-			@include border-radius(10px);
+			@include border-radius(5px);
 			height: 60px;
 			line-height: 1.5;
 			font-size: $fsMiddle;
@@ -110,14 +130,14 @@ $fsGiant: 60px;
 		.buttonPrimary {
 			position: absolute;
 			top: 15px;
-			right: 5px;
+			right: 20px;
 			font-size: $fsMiddle;
 			line-height: 1.5;
 			background-color: $colorLightBlue;
 			color: $colorWhite;
 			cursor: pointer;
 			//@include border-radius(26px);
-			@include border-radius(10px);
+			@include border-radius(5px);
 			border: none;
 			height: 50px;
 			padding: 10px 40px;
@@ -135,8 +155,8 @@ $fsGiant: 60px;
 			.currentHeader {
 				background-color: $colorHeader;
 				color: $colorFontGrey;
-				padding: 15px 10px;
-				@include border-radius-separate(10px, 10px, 0, 0);
+				padding: 15px 25px;
+				@include border-radius-separate(5px,5px, 0, 0);
 				margin-top: 0;
 				//margin-bottom: 20px;
 				font-size: $fsMiddle;
@@ -158,6 +178,7 @@ $fsGiant: 60px;
 				display: block;
 				font-size: $fsGiant;
 				padding: 20px;
+				color: tomato;
 			}
 			.weatherData {
 				padding: 15px 0;
@@ -208,14 +229,18 @@ $fsGiant: 60px;
 		.tableWrapper {
 			margin-top: 15px;
 		}
+		.table th {
+			border-top: none;
+		}
 		.forecast {
+			width: 100%;
 			@include border-radius-separate(0, 0, 10px, 10px);
 
 			thead {
 				font-size: $fsMiddle;
-				tr {
-					border: 1px solid #ddd;
-				}
+				// tr {
+				// 	border: 1px solid #ddd;
+				// }
 				.mainHeader th {
 					font-size: $fsLarge;
 					text-align: center;
@@ -224,14 +249,14 @@ $fsGiant: 60px;
 			}
 			tbody {
 				tr {
-					&:last-child {
-						@include border-radius-separate(0, 0, 10px, 10px);
+					&:last-child, &:last-child:hover {
+						@include border-radius-separate(0, 0, 5px, 5px);
 						td {
-							&:first-child {
-								@include border-radius-separate(0, 0, 0, 10px);
+							&:first-child, &:first-child:hover {
+								@include border-radius-separate(0, 0, 5px, 5px);
 							}
-							&:last-child {
-								@include border-radius-separate(0, 0, 10px, 0);
+							&:last-child, &:last-child:hover {
+								@include border-radius-separate(0, 0, 0, 5px);
 							}
 						}
 					}
@@ -255,6 +280,7 @@ $fsGiant: 60px;
 		}
 		td, th {
 			text-align: center;
+			padding: 10px;
 		}
 		td:first-child, th:first-child {
 			text-align: left;
@@ -314,16 +340,41 @@ $fsGiant: 60px;
 	}
 }
 
-.dbOperations {
-	text-align: right;
-	padding: 15px 0;
-	.btn + .btn {
-		margin-left: 10px;
-	}
-}
+// .dbOperations {
+// 	text-align: right;
+// 	padding: 15px 0;
+// 	.btn + .btn {
+// 		margin-left: 10px;
+// 	}
+// }
 
 .mobileView {
 	color: $colorBlue;
+	
+	&.horizontal {
+		.item {
+			text-align: center;
+			padding: 5px 10px;
+			.time {
+				position: static;
+				top: unset;
+				right: unset;
+				display: inline-block;
+				vertical-align: middle;
+				float: left;
+				margin-right: 10px;
+				line-height: 3;
+			}
+			.sky {
+				margin-right: 10px;
+			}
+			.temperature {
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 10px;
+			}
+		}
+	}
 	.toggle {
 		display: block;
 		cursor: pointer;
@@ -335,8 +386,9 @@ $fsGiant: 60px;
 		//@include border-radius-separate(10px, 10px, 0, 0);
 		margin-top: 0;
 		font-size: $fsNormal;
-		border-bottom: 2px solid $colorGreyLight;
+		border-bottom: 1px solid $colorGreyLight;
 	}
+
 	.item {
 		color: $colorFontGrey;
 		font-size: 0;
@@ -346,7 +398,8 @@ $fsGiant: 60px;
 		&:nth-last-child(2n-1 ) {
 			background-color: $colorMiddleBlue;
 		}
-
+	
+		
 		
 		li {
 			font-size: $fsMiddle;
@@ -368,7 +421,7 @@ $fsGiant: 60px;
 			position: absolute;
 			top: 5px;
 			right: 5px;
-			color: orange;
+			color: $colorFontGrey;
 			font-size: $fsBase;
 		}
 		.sky {
@@ -395,8 +448,27 @@ $fsGiant: 60px;
 
 @media (max-width: 768px) {
 	.darkWeatherHourly {
+		.form {
+			.field {
+				width: 90%;
+				margin: 0 auto;
+			}
+			.search {
+				padding: 15px 80px 15px 15px;
+			}
+			.buttonPrimary {
+				padding: 10px 15px;
+				right: calc(5% + 15px);
+				height: 40px;
+				margin-top: 4px;
+				line-height: 1;
+			}
+		}
 		.weatherWrapper {
 			.content {
+				.location {
+					font-size: $fsLarge;
+				}
 				.otherData {
 					padding: 5px 0;
 					li {
@@ -415,11 +487,11 @@ $fsGiant: 60px;
 }
 
 @media (max-width: 543px) {
-	.dbOperations {
-		.btn + .btn {
-			margin-top: 0px;
-		}
-	}
+	// .dbOperations {
+	// 	.btn + .btn {
+	// 		margin-top: 0px;
+	// 	}
+	// }
 	.mobileView {
 		.currentHeader {
 			font-size: $fsMiddle;
@@ -434,7 +506,6 @@ $fsGiant: 60px;
 				font-size: 16px;
 			}
 			.hour {
-				
 				padding: 5px;
 			}
 			.temperature {

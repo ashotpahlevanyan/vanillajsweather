@@ -201,7 +201,29 @@ nav {
     min-width: 100%;
   }
 }
+body {
+  position: relative;
+}
+
+.bgImage {
+  background-image: url(/images/day-sunny.jpg);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: -1;
+  background-size: cover;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
+
 .darkWeatherHourly {
+  position: relative;
+  z-index: 5;
   font-family: "Roboto", "Open Sans", sans-serif;
   color: #fff;
   font-size: 14px;
@@ -230,12 +252,12 @@ nav {
   padding: 10px 0;
 }
 .darkWeatherHourly .form .search {
-  -webkit-border-radius: 10px;
-  -khtml-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  border-radius: 10px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
   height: 60px;
   line-height: 1.5;
   font-size: 20px;
@@ -248,18 +270,18 @@ nav {
 .darkWeatherHourly .form .buttonPrimary {
   position: absolute;
   top: 15px;
-  right: 5px;
+  right: 20px;
   font-size: 20px;
   line-height: 1.5;
   background-color: #009ad8;
   color: #fff;
   cursor: pointer;
-  -webkit-border-radius: 10px;
-  -khtml-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  border-radius: 10px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
   border: none;
   height: 50px;
   padding: 10px 40px;
@@ -278,17 +300,17 @@ nav {
 .darkWeatherHourly .weatherWrapper .current .currentHeader {
   background-color: #2c2f3d;
   color: #bfc1c8;
-  padding: 15px 10px;
-  -webkit-border-top-left-radius: 10px;
-  -webkit-border-top-right-radius: 10px;
+  padding: 15px 25px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
   -webkit-border-bottom-right-radius: 0;
   -webkit-border-bottom-left-radius: 0;
-  -moz-border-radius-topleft: 10px;
-  -moz-border-radius-topright: 10px;
-  -moz-border-radius-bottomright: 0;
-  -moz-border-radius-bottomleft: 0;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  -moz-border-radius-top-left: 5px;
+  -moz-border-radius-top-right: 5px;
+  -moz-border-radius-bottom-right: 0;
+  -moz-border-radius-bottom-left: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   margin-top: 0;
@@ -310,6 +332,7 @@ nav {
   display: block;
   font-size: 60px;
   padding: 20px;
+  color: tomato;
 }
 .darkWeatherHourly .weatherWrapper .content .weatherData {
   padding: 15px 0;
@@ -359,15 +382,19 @@ nav {
 .darkWeatherHourly .weatherWrapper .tableWrapper {
   margin-top: 15px;
 }
+.darkWeatherHourly .weatherWrapper .table th {
+  border-top: none;
+}
 .darkWeatherHourly .weatherWrapper .forecast {
+  width: 100%;
   -webkit-border-top-left-radius: 0;
   -webkit-border-top-right-radius: 0;
   -webkit-border-bottom-right-radius: 10px;
   -webkit-border-bottom-left-radius: 10px;
-  -moz-border-radius-topleft: 0;
-  -moz-border-radius-topright: 0;
-  -moz-border-radius-bottomright: 10px;
-  -moz-border-radius-bottomleft: 10px;
+  -moz-border-radius-top-left: 0;
+  -moz-border-radius-top-right: 0;
+  -moz-border-radius-bottom-right: 10px;
+  -moz-border-radius-bottom-left: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 10px;
@@ -376,55 +403,52 @@ nav {
 .darkWeatherHourly .weatherWrapper .forecast thead {
   font-size: 20px;
 }
-.darkWeatherHourly .weatherWrapper .forecast thead tr {
-  border: 1px solid #ddd;
-}
 .darkWeatherHourly .weatherWrapper .forecast thead .mainHeader th {
   font-size: 30px;
   text-align: center;
   border-top: 2px solid #ddd;
 }
-.darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child {
+.darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child, .darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child:hover {
   -webkit-border-top-left-radius: 0;
   -webkit-border-top-right-radius: 0;
-  -webkit-border-bottom-right-radius: 10px;
-  -webkit-border-bottom-left-radius: 10px;
-  -moz-border-radius-topleft: 0;
-  -moz-border-radius-topright: 0;
-  -moz-border-radius-bottomright: 10px;
-  -moz-border-radius-bottomleft: 10px;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-top-left: 0;
+  -moz-border-radius-top-right: 0;
+  -moz-border-radius-bottom-right: 5px;
+  -moz-border-radius-bottom-left: 5px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
-.darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child td:first-child {
+.darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child td:first-child, .darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child td:first-child:hover, .darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child:hover td:first-child, .darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child:hover td:first-child:hover {
   -webkit-border-top-left-radius: 0;
   -webkit-border-top-right-radius: 0;
-  -webkit-border-bottom-right-radius: 10px;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-top-left: 0;
+  -moz-border-radius-top-right: 0;
+  -moz-border-radius-bottom-right: 5px;
+  -moz-border-radius-bottom-left: 5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child td:last-child, .darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child td:last-child:hover, .darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child:hover td:last-child, .darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child:hover td:last-child:hover {
+  -webkit-border-top-left-radius: 0;
+  -webkit-border-top-right-radius: 0;
+  -webkit-border-bottom-right-radius: 5px;
   -webkit-border-bottom-left-radius: 0;
-  -moz-border-radius-topleft: 0;
-  -moz-border-radius-topright: 0;
-  -moz-border-radius-bottomright: 10px;
-  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-top-left: 0;
+  -moz-border-radius-top-right: 0;
+  -moz-border-radius-bottom-right: 5px;
+  -moz-border-radius-bottom-left: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border-bottom-right-radius: 10px;
+  border-bottom-right-radius: 5px;
   border-bottom-left-radius: 0;
-}
-.darkWeatherHourly .weatherWrapper .forecast tbody tr:last-child td:last-child {
-  -webkit-border-top-left-radius: 0;
-  -webkit-border-top-right-radius: 0;
-  -webkit-border-bottom-right-radius: 0;
-  -webkit-border-bottom-left-radius: 10px;
-  -moz-border-radius-topleft: 0;
-  -moz-border-radius-topright: 0;
-  -moz-border-radius-bottomright: 0;
-  -moz-border-radius-bottomleft: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 10px;
 }
 .darkWeatherHourly .weatherWrapper tr:nth-child(2n-1) {
   background-color: #323544;
@@ -440,6 +464,7 @@ nav {
 }
 .darkWeatherHourly .weatherWrapper td, .darkWeatherHourly .weatherWrapper th {
   text-align: center;
+  padding: 10px;
 }
 .darkWeatherHourly .weatherWrapper td:first-child, .darkWeatherHourly .weatherWrapper th:first-child {
   text-align: left;
@@ -490,16 +515,30 @@ nav {
   color: #d85400;
 }
 
-.dbOperations {
-  text-align: right;
-  padding: 15px 0;
-}
-.dbOperations .btn + .btn {
-  margin-left: 10px;
-}
-
 .mobileView {
   color: #323544;
+}
+.mobileView.horizontal .item {
+  text-align: center;
+  padding: 5px 10px;
+}
+.mobileView.horizontal .item .time {
+  position: static;
+  top: unset;
+  right: unset;
+  display: inline-block;
+  vertical-align: middle;
+  float: left;
+  margin-right: 10px;
+  line-height: 3;
+}
+.mobileView.horizontal .item .sky {
+  margin-right: 10px;
+}
+.mobileView.horizontal .item .temperature {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
 }
 .mobileView .toggle {
   display: block;
@@ -511,7 +550,7 @@ nav {
   padding: 15px 10px;
   margin-top: 0;
   font-size: 25px;
-  border-bottom: 2px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
 }
 .mobileView .item {
   color: #bfc1c8;
@@ -543,7 +582,7 @@ nav {
   position: absolute;
   top: 5px;
   right: 5px;
-  color: orange;
+  color: #bfc1c8;
   font-size: 14px;
 }
 .mobileView .item .sky {
@@ -567,6 +606,23 @@ nav {
 }
 
 @media (max-width: 768px) {
+  .darkWeatherHourly .form .field {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .darkWeatherHourly .form .search {
+    padding: 15px 80px 15px 15px;
+  }
+  .darkWeatherHourly .form .buttonPrimary {
+    padding: 10px 15px;
+    right: calc(5% + 15px);
+    height: 40px;
+    margin-top: 4px;
+    line-height: 1;
+  }
+  .darkWeatherHourly .weatherWrapper .content .location {
+    font-size: 30px;
+  }
   .darkWeatherHourly .weatherWrapper .content .otherData {
     padding: 5px 0;
   }
@@ -581,10 +637,6 @@ nav {
   }
 }
 @media (max-width: 543px) {
-  .dbOperations .btn + .btn {
-    margin-top: 0px;
-  }
-
   .mobileView .currentHeader {
     font-size: 20px;
     padding: 10px;

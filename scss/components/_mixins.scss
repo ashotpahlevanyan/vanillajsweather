@@ -112,10 +112,10 @@
   -webkit-border-bottom-right-radius: $bottomRightRadius;
   -webkit-border-bottom-left-radius:  $bottomLeftRadius;
 
-  -moz-border-radius-topleft:     $topLeftRadius;
-  -moz-border-radius-topright:    $topRightRadius;
-  -moz-border-radius-bottomright: $bottomRightRadius;
-  -moz-border-radius-bottomleft:  $bottomLeftRadius;
+  -moz-border-radius-top-left:     $topLeftRadius;
+  -moz-border-radius-top-right:    $topRightRadius;
+  -moz-border-radius-bottom-right: $bottomRightRadius;
+  -moz-border-radius-bottom-left:  $bottomLeftRadius;
 
   border-top-left-radius:     $topLeftRadius;
   border-top-right-radius:    $topRightRadius;

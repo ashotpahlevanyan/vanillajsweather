@@ -614,130 +614,11 @@ function updateForecast(weather){
 	showHideWrapper();
 }
 
-// function hide() {
-
-// 	for(let j = 0; j < value.length; j++) {
-// 		if(value.length === 8) {
-// 			items.appendChild(createItem(value[j]));
-// 		} else {
-// 			if(index == 1) {
-// 				let td = document.createElement('td');
-// 				td.textContent = '';
-// 				td.colSpan = 8 - value.length;
-// 				items.appendChild(td);
-// 			}
-// 			items.appendChild(createCell(value[j]));
-// 		}
-// 	}
-// 	if(index === 6){
-// 		let td = document.createElement('td');
-// 		td.textContent = '';
-// 		td.colSpan = 8 - value.length;
-// 		items.appendChild(td);
-// 	}
-// 	tbody.appendChild(tbr);
-
-// 	for(let i = 0; i < 5; i++) {
-// 		let day = document.createElement('li');
-// 		day.className = 'day';
-
-// 		let toggle = document.createElement('a');
-// 		toggle.className = 'toggle';
-
-// 		let currentHeader = document.createElement('h4');
-// 		currentHeader.classList = 'currentHeader clearfix';
-
-// 		let weekday = document.createElement('span');
-// 		weekday.classList = 'day float-left';
-// 		weekday.textContent = 'Friday';
-
-// 		let monthday = document.createElement('span');
-// 		monthday.classList = 'day float-right';
-// 		monthday.textContent = '2 Mar';
-
-// 		currentHeader.appendChild(weekday);
-// 		currentHeader.appendChild(monthday);
-// 		toggle.appendChild(currentHeader);
-// 		day.appendChild(toggle);
-
-
-// 		let items = document.createElement('div');
-// 		items.className = 'items';
-
-// 		for(let j = 0; j < 4; j++) {
-// 			let item = document.createElement('ul');
-// 			item.className = 'item';
-
-// 			let daytime = document.createElement('li');
-// 			daytime.className = 'daytime';
-// 			daytime.textContent = 'Night';
-
-// 			item.appendChild(daytime);
-
-// 			for(let k = 0; k < 2; k++) {
-
-// 				let hour = document.createElement('li');
-// 				hour.className = 'hour';
-
-// 				let time = document.createElement('span');
-// 				time.className = 'time';
-
-// 				hour.appendChild(time);
-
-// 				let sky = document.createElement('div');
-// 				sky.className = 'sky';
-
-// 				let icon = document.createElement('i');
-// 				icon.classList = 'wi wi-cloud';
-
-// 				sky.appendChild(icon);
-// 				hour.appendChild(sky);
-
-// 				let tempH = document.createElement('div');
-// 				tempH.classList = 'temperature high';
-// 				let valueH = document.createElement('span');
-// 				valueH.className = 'value';
-// 				valueH.textContent = '7.18';
-
-// 				let unitH = document.createElement('span');
-// 				unitH.className = 'unit';
-
-// 				tempH.appendChild(valueH);
-// 				tempH.appendChild(unitH);
-
-
-// 				let tempL = document.createElement('div');
-// 				tempL.classList = 'temperature low';
-// 				let valueL = document.createElement('span');
-// 				valueL.className = 'value';
-// 				valueL.textContent = '3.18';
-
-// 				let unitL = document.createElement('span');
-// 				unitL.className = 'unit';
-				
-// 				tempL.appendChild(valueL);
-// 				tempL.appendChild(unitL);
-
-// 				hour.appendChild(tempH);
-// 				hour.appendChild(tempL);
-// 				item.appendChild(hour);
-// 			}
-// }
-
 function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function createItemMobile(filteredItem) {
-	// let item = document.createElement('div');
-	// item.className = 'item';
-
-	// let daytime = document.createElement('li');
-	// daytime.className = 'daytime';
-	// daytime.textContent = capitalizeFirstLetter(filteredItem.daytime);
-
-	// item.appendChild(daytime);
-
 	let item = document.createElement('div');
 	item.classList = 'item clearfix';
 
@@ -774,30 +655,7 @@ function createItemMobile(filteredItem) {
 	}
 	tempH.appendChild(valueH);
 	tempH.appendChild(unitH);
-
-
-	// let tempL = document.createElement('div');
-	// tempL.classList = 'temperature low';
-	// let valueL = document.createElement('span');
-	// valueL.className = 'value';
-	// valueL.textContent = filteredItem.main.temp_min;
-
-	// let unitL = document.createElement('span');
-	// unitL.className = 'unit';
-	// if(units == 'metric') {
-	// 	unitL.textContent = 'C';
-	// 	var celcius = document.createElement('sup');
-	// 	celcius.textContent = 'o';
-	// 	unitL.insertBefore(celcius, unitL.firstChild);
-	// } else {
-	// 	unitL.textContent = 'F';
-	// }
-	// tempL.appendChild(valueL);
-	// tempL.appendChild(unitL);
-
 	item.appendChild(tempH);
-	//item.appendChild(tempL);
-	// item.appendChild(hour);
 	
 	return item;
 }
@@ -856,29 +714,7 @@ function createItem(filtered, index) {
 		}
 		tempH.appendChild(valueH);
 		tempH.appendChild(unitH);
-
-
-		// let tempL = document.createElement('div');
-		// tempL.classList = 'temperature low';
-		// let valueL = document.createElement('span');
-		// valueL.className = 'value';
-		// valueL.textContent = filtered[k].main.temp_min;
-
-		// let unitL = document.createElement('span');
-		// unitL.className = 'unit';
-		// if(units == 'metric') {
-		// 	unitL.textContent = 'C';
-		// 	var celcius = document.createElement('sup');
-		// 	celcius.textContent = 'o';
-		// 	unitL.insertBefore(celcius, unitL.firstChild);
-		// } else {
-		// 	unitL.textContent = 'F';
-		// }
-		// tempL.appendChild(valueL);
-		// tempL.appendChild(unitL);
-
 		hour.appendChild(tempH);
-		//hour.appendChild(tempL);
 		item.appendChild(hour);
 	}
 
@@ -921,27 +757,6 @@ function createCell(item) {
 		temperature.appendChild(unit);
 		td.appendChild(temperature);
 	})();
-
-	// (function (){
-	// 	var temperature = document.createElement('div');
-	// 	temperature.classList = 'temperature low';
-	// 	var tempValue = document.createElement('span');
-	// 	tempValue.className = 'value';
-	// 	tempValue.textContent = item.main.temp_min;
-	// 	temperature.appendChild(tempValue);
-	// 	var unit = document.createElement('span');
-	// 	unit.className = 'unit';
-	// 	if(units == 'metric') {
-	// 		unit.textContent = 'C';
-	// 		var celcius = document.createElement('sup');
-	// 		celcius.textContent = 'o';
-	// 		unit.insertBefore(celcius, unit.firstChild);
-	// 	} else {
-	// 		unit.textContent = 'F';
-	// 	}
-	// 	temperature.appendChild(unit);
-	// 	td.appendChild(temperature);
-	// })();
 
 	return td;
 }

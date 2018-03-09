@@ -350,16 +350,16 @@ body {
 
 .mobileView {
 	color: $colorBlue;
-	
-	&.horizontal {
-		.day:first-child {
-			.items {
-				display: block;
-			}
-		}
+	.day:first-child {
 		.items {
-			display: none;
+			display: block;
 		}
+	}
+	.items {
+		display: none;
+	}
+	&.horizontal {
+		
 		.item {
 			text-align: center;
 			padding: 5px 10px;
@@ -475,7 +475,10 @@ body {
 		.weatherWrapper {
 			.content {
 				.location {
-					font-size: $fsLarge;
+					font-size: 2.5 * $fsBase;
+				}
+				.weatherData {
+					 font-size: $fsLarge;
 				}
 				.otherData {
 					padding: 5px 0;

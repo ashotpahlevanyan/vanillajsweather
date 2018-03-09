@@ -518,10 +518,10 @@ body {
 .mobileView {
   color: #323544;
 }
-.mobileView.horizontal .day:first-child .items {
+.mobileView .day:first-child .items {
   display: block;
 }
-.mobileView.horizontal .items {
+.mobileView .items {
   display: none;
 }
 .mobileView.horizontal .item {
@@ -627,6 +627,9 @@ body {
     line-height: 1;
   }
   .darkWeatherHourly .weatherWrapper .content .location {
+    font-size: 35px;
+  }
+  .darkWeatherHourly .weatherWrapper .content .weatherData {
     font-size: 30px;
   }
   .darkWeatherHourly .weatherWrapper .content .otherData {

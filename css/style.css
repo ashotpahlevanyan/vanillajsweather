@@ -518,11 +518,11 @@ body {
 .mobileView {
   color: #323544;
 }
-.mobileView .day:first-child .items {
-  display: block;
-}
 .mobileView .items {
   display: none;
+}
+.mobileView .items.show {
+  display: block;
 }
 .mobileView.horizontal .item {
   text-align: center;

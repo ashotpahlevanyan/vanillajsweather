@@ -350,13 +350,16 @@ body {
 
 .mobileView {
 	color: $colorBlue;
-	.day:first-child {
-		.items {
-			display: block;
-		}
-	}
+	// .day:first-child {
+	// 	.items {
+	// 		display: block;
+	// 	}
+	// }
 	.items {
 		display: none;
+		&.show {
+			display: block;
+		}
 	}
 	&.horizontal {
 		

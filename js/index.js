@@ -114,17 +114,20 @@ function initializeToggles() {
 		let items = this.parentNode.querySelector('.items');
 		for(let k = 0; k < allItems.length; k++) {
 			if(items != allItems[k]) {
-				allItems[k].style.display = 'none';
+				allItems[k].classList.remove('show');
 			}
 		}
-		if(items.style.display == 'none') {
-			items.style.display = 'block';
+		if(!hasClass(items, 'show')) {
+			items.classList.add('show');
 		} else {
-			items.style.display = 'none';
+			items.classList.remove('show');
 		}
 	})});
 }
 
+function hasClass(element, cls) {
+	return (' ' + element.className + '').indexOf(' ' + cls + '') > -1;
+}
 
 /**
  * In Memory Manipulation functions
@@ -530,13 +533,17 @@ function updateForecast(weather){
 			currentHeader.appendChild(monthday);
 			toggle.appendChild(currentHeader);
 			day.appendChild(toggle);
-
-			let items = document.createElement('div');
-			items.className = 'items';
-
+			
 			let daytimes = ['night', 'morning', 'day', 'evening'];
 			index ++;
-
+			
+			let items = document.createElement('div');
+			if(index == 1) {
+				items.classList = 'items show';
+			} else {
+				items.className = 'items';
+			}
+			
 			for(let m = 0; m < daytimes.length; m++) {
 				let filtered = value.filter(item => {return item.daytime == daytimes[m]});
 				console.log(filtered);
@@ -586,12 +593,16 @@ function updateForecast(weather){
 			currentHeader.appendChild(monthday);
 			toggle.appendChild(currentHeader);
 			day.appendChild(toggle);
-
-			let items = document.createElement('div');
-			items.className = 'items';
-
+			
 			let daytimes = ['night', 'morning', 'day', 'evening'];
 			index ++;
+			
+			let items = document.createElement('div');
+			if(index == 1) {
+				items.classList = 'items show';
+			} else {
+				items.className = 'items';
+			}
 
 			for(let m = 0; m < daytimes.length; m++) {
 				let filtered = value.filter(item => {return item.daytime == daytimes[m]});

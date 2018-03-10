@@ -67,7 +67,7 @@ function domContentLoaded() {
 				|| document.body.clientWidth;
 	showHideWrapper();
 	openIDB();
-	navigator.geolocation.getCurrentPosition(weatherByPosition);
+	navigator.geolocation.getCurrentPosition(displayByPosition);
 }
 
 searchForm.addEventListener('submit', function(e) {
@@ -260,7 +260,7 @@ function prepareForecastToDisplay(weather) {
 	let uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	storage.forecasts.push(obj);
-	console.log(weather);
+	//console.log(weather);
 	displayForecast(weather);
 	writeForecastsToDb();
 }
@@ -270,7 +270,7 @@ function prepareCurrentToDisplay(weather) {
 	let uniqueId = generateId(weather.coord.lat, weather.coord.lon);
 	let obj = {'uniqueId': uniqueId, 'weather': weather};
 	storage.currents.push(obj);
-	console.log(weather);
+	//console.log(weather);
 	displayCurrent(weather);
 	writeCurrentsToDb();
 }
@@ -546,9 +546,9 @@ function updateForecast(weather){
 			
 			for(let m = 0; m < daytimes.length; m++) {
 				let filtered = value.filter(item => {return item.daytime == daytimes[m]});
-				console.log(filtered);
+				//console.log(filtered);
 				if(filtered.length != 0) {
-					items.appendChild(createItem(filtered, index));
+					items.appendChild(createItemTablet(filtered, index));
 				}
 			}
 			day.appendChild(items);
@@ -606,7 +606,7 @@ function updateForecast(weather){
 
 			for(let m = 0; m < daytimes.length; m++) {
 				let filtered = value.filter(item => {return item.daytime == daytimes[m]});
-				console.log(filtered);
+				//console.log(filtered);
 				if(filtered.length != 0) {
 					for(let t = 0; t < filtered.length; t++) {
 						items.appendChild(createItemMobile(filtered[t]));
@@ -671,7 +671,7 @@ function createItemMobile(filteredItem) {
 	return item;
 }
 
-function createItem(filtered, index) {
+function createItemTablet(filtered, index) {
 	let item = document.createElement('ul');
 	item.className = 'item';
 
@@ -846,7 +846,7 @@ function openIDB() {
 function addDataToDb(weather) {
 	var uniqueId = generateId(weather.city.coord.lat, weather.city.coord.lon);
 	var obj = {'uniqueId' : uniqueId, 'weather': weather};
-	console.log(obj);
+	//console.log(obj);
 	var store = getObjectStore(DB_FORECASTS, 'readwrite');
 	if(!store) {
 		console.log('could not get an object store, cannot add data to db');
@@ -977,11 +977,13 @@ function XHRCall(url, type, cb) {
  * Utility functions
  *
  * getDateTime(dateString)
+ * dayTimeNameByValue(time)
  * dateNameByValue(type, value)
  * calculateDirectionText(angle)
  * calculateDirectionClass(angle)
  * calculateSkyClass(icon)
  * calculateImageUrl(icon)
+ * calculateColorByWeather(icon)
  */
 
 function getDateTime(dateString) {

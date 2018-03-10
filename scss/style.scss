@@ -390,6 +390,11 @@ body {
 		display: block;
 		cursor: pointer;
 	}
+	.day:last-child {
+		.currentHeader {
+			border-bottom: none;
+		}
+	}
 	.currentHeader {
 		background-color: $colorHeader;
 		color: $colorFontGrey;
